@@ -1,18 +1,12 @@
 from bs4 import BeautifulSoup
 
-__filename_words_list = "all-places-strings.lc.txt"
-__filename = "reut2-0000.sgm"
-
-
-# currently works with a single file
-# read article
 
 def get_soup_obj(filename):
     with open(filename) as fp:
         return BeautifulSoup(fp, "html.parser")
 
 
-def get_all_articles_in_file(filename, soup_obj):
+def get_all_articles_in_file(soup_obj):
     return soup_obj.find_all('reuters')
 
 
@@ -48,7 +42,6 @@ def make_dict_with_newid_and_each_article_content(articles, soup_obj):
 
 def populate_inverted_index_dict_with_newid_as_values(newid_dict, inverted_index):
     for newid in newid_dict:
-        print('newid is: ' + newid)
         for word in inverted_index:
             if any(word in each_article_word for each_article_word in newid_dict[newid]):
                 inverted_index[word].append(newid)
@@ -61,11 +54,3 @@ def print_inverted_index(inverted_index):
         for each in inverted_index[key]:
             print(each, end=", ")
         print('\n')
-
-
-soup = get_soup_obj(__filename)
-__contents = get_all_articles_in_file(__filename, soup)
-__newid_dict = make_dict_with_newid_and_each_article_content(__contents, soup)
-__inverted_index = populate_inverted_index_dict_with_word_as_key(__filename_words_list)
-__inverted_index = populate_inverted_index_dict_with_newid_as_values(__newid_dict, __inverted_index)
-print_inverted_index(__inverted_index)
