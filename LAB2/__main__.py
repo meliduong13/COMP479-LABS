@@ -1,7 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 
-from LAB2 import *
+from LAB2.LAB2 import *
 
 files = [f for f in listdir('./files/files_smaller') if isfile(join('./files/files_smaller', f))]
 print(files)
