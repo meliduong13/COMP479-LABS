@@ -12,3 +12,4 @@ class Node:
 
     def get_id(self):
         return self.id
+

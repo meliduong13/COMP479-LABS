@@ -22,12 +22,12 @@ for fullpath in glob.iglob(root_dir + '**/**', recursive=True):
                 id_counter += 1
 
 # inverted_index['Brutus'].output_list()
-print(inverted_index['Brutus'].list_length())
-print('\n')
-inverted_index['Caesar'].output_list()
-print('\n')
-inverted_index['Calpurnia'].output_list()
-print('\n')
+# print(inverted_index['Brutus'].list_length())
+# print('\n')
+# inverted_index['Caesar'].output_list()
+# print('\n')
+# inverted_index['Calpurnia'].output_list()
+# print('\n')
 
 # while current_node is not None:
 #     print(current_node.id)
@@ -48,7 +48,24 @@ print('\n')
 #             if current_node_list1.
 
 # inverted_index['Brutus'].intersect_with_another_list(inverted_index['Caesar']).output_list()
+inverted_index['Brutus'].union_with_another_list(inverted_index['Caesar']).output_list()
 
 #
-print(inverted_index['Calpurnia'].union_with_another_list(inverted_index['Brutus']).list_length())
+#print(inverted_index['Calpurnia'].union_with_another_list(inverted_index['Brutus']).list_length())
 # print('abc')
+
+#
+# randomList = LinkedList()
+# randomList.add(Node('filename1', 1))
+# randomList.add(Node('filename2', 2))
+# randomList.add(Node('filename3', 3))
+#
+# randomList2 = LinkedList()
+# randomList2.add(Node('filename1', 1))
+# randomList2.add(Node('filename3', 8))
+# randomList2.add(Node('filename3', 9))
+# randomList2.add(Node('filename3', 11))
+#
+# res = LinkedList()
+# res = randomList.union_with_another_list(randomList2)
+# res.output_list()

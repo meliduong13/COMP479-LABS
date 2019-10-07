@@ -46,24 +46,74 @@ class LinkedList:
             current_node_another_list = another_list.head
             if self.list_length() is 0 or another_list.list_length() is 0:
                 return LinkedList()
+            # infinite while loop
             while self.list_length() is not 0 and another_list.list_length() is not 0:
-                if current_node_self.id is not current_node_another_list.id:
-                    while current_node_self.id < current_node_another_list.id:
-                        if current_node_self.next is not None:
+                # if current_node_self is None and current_node_another_list is not None:
+                #     while current_node_another_list is not None:
+                #         mylist.add(current_node_another_list)
+                #         current_node_another_list = current_node_another_list.next
+                # if current_node_another_list is None and current_node_self is not None:
+                #     while current_node_self is not None:
+                #         mylist.add(current_node_self)
+                #         current_node_self = current_node_self.next
+                if current_node_self is not None and current_node_another_list is not None:
+                    if current_node_self.id is not current_node_another_list.id:
+                        while current_node_self.id < current_node_another_list.id:
                             mylist.add(current_node_self)
-                            current_node_self = current_node_self.next
-                    while current_node_self.id > current_node_another_list.id:
-                        if current_node_another_list.next is not None:
+                            if current_node_self.next is not None:
+                                current_node_self = current_node_self.next
+                            elif current_node_self is None and current_node_another_list is not None:
+                                while current_node_another_list is not None:
+                                    mylist.add(current_node_another_list)
+                                    current_node_another_list = current_node_another_list.next
+                                    if current_node_another_list is None:
+                                        return list
+                            elif current_node_self is None and current_node_another_list is None:
+                                return list
+                        while current_node_self.id > current_node_another_list.id:
                             mylist.add(current_node_another_list)
-                            current_node_another_list = current_node_another_list.next
-                elif current_node_self.id is current_node_another_list.id:
-                    mylist.add(current_node_self)
-                    if current_node_self.next is not None and current_node_another_list.next is not None:
+                            if current_node_another_list.next is not None:
+                                current_node_another_list = current_node_another_list.next
+                            elif current_node_another_list.next is None and current_node_self is not None:
+                                while current_node_self is not None:
+                                    mylist.add(current_node_self)
+                                    current_node_self = current_node_self.next
+                            elif current_node_self is None and current_node_another_list is None:
+                                return list
+                    elif current_node_self.id is current_node_another_list.id:
+                        mylist.add(current_node_self)
                         current_node_another_list = current_node_another_list.next
                         current_node_self = current_node_self.next
-                    else:
-                        return mylist
-        return list
+                elif current_node_self.next is None and current_node_another_list.next is None:
+                    return list
+            return list
+
+        #     while self.list_length() is not 0 and another_list.list_length() is not 0:
+        #         if current_node_self is None and current_node_another_list is not None:
+        #             while current_node_another_list is not None:
+        #                 mylist.add(current_node_another_list)
+        #                 current_node_another_list = current_node_another_list.next
+        #         elif current_node_another_list is None and current_node_self is not None:
+        #             while current_node_self is not None:
+        #                 mylist.add(current_node_self)
+        #                 current_node_self = current_node_self.next
+        #         elif current_node_self is not None and current_node_another_list is not None:
+        #             if current_node_self.id is not current_node_another_list.id:
+        #                 while current_node_self is not None:
+        #                     if current_node_self.id < current_node_another_list.id:
+        #                         mylist.add(current_node_self)
+        #                         current_node_self = current_node_self.next
+        #                 while current_node_self is not None:
+        #                     if current_node_self.id > current_node_another_list.id:
+        #                         mylist.add(current_node_another_list)
+        #                         current_node_another_list = current_node_another_list.next
+        #             elif current_node_self.id is current_node_another_list.id:
+        #                 mylist.add(current_node_self)
+        #                 current_node_another_list = current_node_another_list.next
+        #                 current_node_self = current_node_self.next
+        #         elif current_node_self.next is None and current_node_another_list.next is None:
+        #             return list
+        # return list
 
     def intersect_with_another_list(self, another_list):
         mylist = LinkedList()

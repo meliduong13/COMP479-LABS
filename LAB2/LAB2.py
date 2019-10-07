@@ -11,7 +11,7 @@ def get_all_articles_in_file(soup_obj):
 
 
 # get all words to look for from word doc
-def populate_inverted_index_dict_with_word_as_key(filename):
+def populate_inverted_index_key(filename):
     inverted_index = {}
     with open(filename, "r") as fd:
         words_list = fd.read().splitlines()
@@ -39,8 +39,8 @@ def make_dict_with_newid_and_each_article_content(articles, soup_obj):
                 newid_dict[each['newid']] = ""
     return newid_dict
 
-
-def populate_inverted_index_dict_with_newid_as_values(newid_dict, inverted_index):
+#inverted index key:  term ; value: newid
+def populate_inverted_index(newid_dict, inverted_index):
     for newid in newid_dict:
         for word in inverted_index:
             if any(word in each_article_word for each_article_word in newid_dict[newid]):
