@@ -1,5 +1,7 @@
 import nltk
 import string
+import queue
+from multiprocessing.dummy import Pool as ThreadPool
 
 nltk.download('punkt')
 
@@ -7,29 +9,22 @@ nltk.download('punkt')
 def tokenize_sgm(article, soup_obj):
     tuples = []
     if soup_obj.find(newid=article['newid']) is not None:
-        # if there is a body
-        if soup_obj.find(newid=article['newid']).find("body") is not None:
-            # assign it to the key newid
-            body = soup_obj.find(newid=article['newid']).find("body").contents[0]
-            # body = body.strip().rstrip().lower().replace('\\n', ' ').replace('\r', '')
-            # body = body.translate(string.punctuation).split()
-            body = nltk.word_tokenize(body)
-            tuples.extend(make_tuples(body, article['newid']))
+        # assign it to the key newid
+        body = soup_obj.find(newid=article['newid']).getText()
+        body = nltk.word_tokenize(body)
+        tuples.extend(make_tuples(body, article['newid']))
+        for tuple in tuples:
+            print(tuple)
     return tuples
 
 
 def tokenize_sgm_articles(articles, soup_obj):
     tuples = []
+    pool = ThreadPool(80)
     for article in articles:
-        if soup_obj.find(newid=article['newid']) is not None:
-            # if there is a body
-            if soup_obj.find(newid=article['newid']).find("body") is not None:
-                # assign it to the key newid
-                body = soup_obj.find(newid=article['newid']).find("body").contents[0]
-                tokenized_body = nltk.word_tokenize(body)
-                tuples.extend(make_tuples(tokenized_body, article['newid']))
-    for each in tuples:
-        print(each)
+        tuples.append(pool.apply_async(tokenize_sgm, (article, soup_obj)))
+    pool.close()
+    pool.join()
     return tuples
 
 

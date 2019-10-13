@@ -8,7 +8,6 @@ from os.path import isfile, join
 
 bloc_counter = 0
 files = [f for f in listdir('./files') if isfile(join('./files', f))]
-pool = ThreadPool(len(files))
 
 for file in files:
     with open('./files/' + file) as fp:
@@ -20,8 +19,4 @@ for file in files:
         articles_counter = 0
 
         if articles is not None:
-            tuples.append(pool.apply_async(tokenize_sgm_articles, (articles, soup)))
-        for r in tuples:
-            print(r.get())
-        pool.close()
-        pool.join()
+            tuples.append(tokenize_sgm_articles(articles, soup))
