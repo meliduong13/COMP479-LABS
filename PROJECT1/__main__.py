@@ -2,18 +2,26 @@ from multiprocessing.dummy import Pool as ThreadPool
 from bs4 import BeautifulSoup
 from spimi import *
 import threading
+import queue
+from os import listdir
+from os.path import isfile, join
 
-global_counter = 0
-with open('reut2-001.sgm') as fp:
-    soup = BeautifulSoup(fp, "html.parser")
-    articles = soup.find_all('reuters')
-    tuples = []
-    articles_counter = 0
-    if articles is not None:
-        while articles_counter <= 500:
-            for article in articles:
-                global_counter += global_counter
-                articles_counter += articles_counter
-                tuples.extend(tokenize_sgm(article, soup))
-            spimi_invert(tuples, global_counter)
+bloc_counter = 0
+files = [f for f in listdir('./files') if isfile(join('./files', f))]
+pool = ThreadPool(len(files))
+
+for file in files:
+    with open('./files/' + file) as fp:
+        soup = BeautifulSoup(fp, "html.parser")
+        articles = soup.find_all('reuters')
+        tuples = []
+        que = queue.Queue()
+        threads_list = list()
         articles_counter = 0
+
+        if articles is not None:
+            tuples.append(pool.apply_async(tokenize_sgm_articles, (articles, soup)))
+        for r in tuples:
+            print(r.get())
+        pool.close()
+        pool.join()
