@@ -20,7 +20,7 @@ def mergeBlocks(files):
     word = ""
     id_list = ""
     for file in files:
-        with open('./output_test/' + file) as fp:
+        with open('./output/' + file) as fp:
             print(file)
             write_word = False
             write_id = False
@@ -29,13 +29,14 @@ def mergeBlocks(files):
                 for ch in line:
                     if ch is "\"" and write_word is False:
                         if dict_from_text is not None and word in dict_from_text.keys() and id_list is not "":
-                            dict_from_text[word] = dict_from_text[word].join(',' + id_list)
+                            dict_from_text[word].append(id_list)
                         word = ""
                         word += ch
                         # if reaching 25 000, write dict to disk
 
                         write_word = True
-                        # print(id_list)
+                        # words.write(id_list)
+                        words.write('\n')
                         # print("\n")
                         id_list = ""
 
@@ -48,23 +49,28 @@ def mergeBlocks(files):
                         words.write(word)
                         words.write('\n')
                         if word not in dict_from_text.keys():
-                            dict_from_text[word] = ""
+                            dict_from_text[word] = []
                         word_counter += 1
                     # get the list of ID for that word, remove all the brackets
                     elif write_word is False and word is not "" and ch is not "[" and ch is not "]":
                         id_list += ch
 
-    if dict_from_text is not None and word in dict_from_text.keys():
-        dict_from_text[word] = dict_from_text[word].join(id_list)
+    # if dict_from_text is not None and word in dict_from_text.keys():
+    #     dict_from_text[word] = dict_from_text[word].join(id_list)
     print(id_list)
     print(word_counter)
     print(len(dict_from_text.keys()))
     words.close()
 
+    dict_file = open("dict.txt", "w+")
     for key, value in dict_from_text.items():
-        print(key)
-        print("values: " + value)
-        print('\n')
+        dict_file.write(key + ': ')
+        id_list_str = ''
+        for each_id in value:
+            id_list_str += each_id + ', '
+        dict_file.write(id_list_str)
+        dict_file.write('\n')
+    dict_file.close()
 
 
 def clean_list(string_of_ids):
