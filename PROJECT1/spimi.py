@@ -1,12 +1,77 @@
-import nltk
-import string
-import queue
-from multiprocessing.dummy import Pool as ThreadPool
-from bs4 import BeautifulSoup
+import re
 import json
-import math
+from multiprocessing.dummy import Pool as ThreadPool
+from os import listdir
+from os.path import isfile, join
+
+from bs4 import BeautifulSoup
+
+import nltk
 
 nltk.download('punkt')
+
+
+def mergeBlocks(files):
+    # files = [f for f in listdir('./files') if isfile(join('./files', f))]
+    word_counter = 0
+    pattern = re.compile('\[\".*\",')
+    words = open("words.txt", "w+")
+    dict_from_text = {}
+    word = ""
+    id_list = ""
+    for file in files:
+        with open('./output_test/' + file) as fp:
+            print(file)
+            write_word = False
+            write_id = False
+            id_list = ""
+            for line in fp:
+                for ch in line:
+                    if ch is "\"" and write_word is False:
+                        if dict_from_text is not None and word in dict_from_text.keys() and id_list is not "":
+                            dict_from_text[word] = dict_from_text[word].join(',' + id_list)
+                        word = ""
+                        word += ch
+                        # if reaching 25 000, write dict to disk
+
+                        write_word = True
+                        # print(id_list)
+                        # print("\n")
+                        id_list = ""
+
+                    elif write_word is True and ch is not "\"":
+                        word += ch
+                    # this is the end quotation mark of a word
+                    elif write_word is True and ch is "\"":
+                        write_word = False
+                        word += ch
+                        words.write(word)
+                        words.write('\n')
+                        if word not in dict_from_text.keys():
+                            dict_from_text[word] = ""
+                        word_counter += 1
+                    # get the list of ID for that word, remove all the brackets
+                    elif write_word is False and word is not "" and ch is not "[" and ch is not "]":
+                        id_list += ch
+
+    if dict_from_text is not None and word in dict_from_text.keys():
+        dict_from_text[word] = dict_from_text[word].join(id_list)
+    print(id_list)
+    print(word_counter)
+    print(len(dict_from_text.keys()))
+    words.close()
+
+    for key, value in dict_from_text.items():
+        print(key)
+        print("values: " + value)
+        print('\n')
+
+
+def clean_list(string_of_ids):
+    list_of_ids = []
+    for each in string_of_ids.split(','):
+        list_of_ids.append(each)
+    return list_of_ids
 
 
 def tokenize(files):
@@ -15,6 +80,7 @@ def tokenize(files):
     # open each file, remove unneeded tags, tokenize
     newid = 1
     block_write = 0
+    wrote_to_disk = False
 
     for file in files:
         with open('./files/' + file) as fp:
@@ -26,26 +92,23 @@ def tokenize(files):
                 if word is "\x03":
                     newid += 1
                     wrote_to_disk = False
+                final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
 
-                if newid % 500 is 0 and not wrote_to_disk:
+                if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
                     print(newid)
                     wrote_to_disk = True
                     disk_write = open("./output/block" + str(block_write) + ".txt", "w+")
-                    disk_write.write(json.dumps(final_dict))
+                    disk_write.write(json.dumps(sorted(final_dict.items()), separators=(',', ':')))
                     disk_write.close()
                     block_write += 1
                     final_dict = {}
-                    final_dict = add_to_dic(word=word, newid=newid, my_dict=final_dict)
-
-                else:
-                    final_dict = add_to_dic(word=word, newid=newid, my_dict=final_dict)
-    # remaining that has not been written to disk
     if len(final_dict) is not 0:
         disk_write = open("./output/block" + str(block_write) + ".txt", "w+")
         disk_write.write(json.dumps(final_dict))
         disk_write.close()
 
-def add_to_dic(word, newid, my_dict):
+
+def add_to_dict(word, newid, my_dict):
     if word not in my_dict.keys():
         my_dict[word] = [newid]
     else:
@@ -53,9 +116,6 @@ def add_to_dic(word, newid, my_dict):
             # if value doesn't exist in value list for given key
             my_dict[word].append(newid)
     return my_dict
-
-
-# def write_to_disk()
 
 
 def tokenize_sgm(article, soup_obj):
