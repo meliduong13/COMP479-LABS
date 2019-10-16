@@ -212,7 +212,7 @@ def tokenize_all(files):
                 if word is "\x03":
                     newid += 1
                     wrote_to_disk = False
-                if newid % 500 is 0 and not wrote_to_disk:
+                if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
                     print(newid)
                     wrote_to_disk = True
 
