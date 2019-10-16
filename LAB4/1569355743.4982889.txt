@@ -1,0 +1,24 @@
+EUTERS>
+<REUTERS TOPICS="YES" LEWISSPLIT="TRAIN" CGISPLIT="TRAINING-SET" OLDID="16245" NEWID="925">
+<DATE> 3-MAR-1987 05:51:30.55</DATE>
+<TOPICS><D>trade</D></TOPICS>
+<PLACES><D>china</D><D>usa</D></PLACES>
+<PEOPLE></PEOPLE>
+<ORGS><D>gatt</D></ORGS>
+<EXCHANGES></EXCHANGES>
+<COMPANIES></COMPANIES>
+<UNKNOWN>
+&#5;&#5;&#5;RM
+&#22;&#22;&#1;f0829&#31;reute
+u f BC-CHINA-CALLS-FOR-BETTE   03-03 0109</UNKNOWN>
+<TEXT>&#2;
+<TITLE>CHINA CALLS FOR BETTER TRADE DEAL WITH U.S.</TITLE>
+<AUTHOR>    By Mark O'Neill, Reuters</AUTHOR>
+<DATELINE>    PEKING, March 3 - </DATELINE><BODY>China called on the United States to
+remove curbs on its exports, to give it favourable trading
+status and ease restrictions on exports of high technology.
+    But the U.S. Embassy replied that Chinese figures showing
+13 years of trade deficits with the U.S. Out of the last 15 are
+inaccurate and said Peking itself would have to persuade
+Congress to change laws which limit its exports.
+     The official International Business ne

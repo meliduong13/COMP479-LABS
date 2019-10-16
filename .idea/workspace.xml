@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="32a3ffde-7f92-4426-ab97-033c58ed1d67" name="Default Changelist" comment="FINAL DICT IS FKN WORKING LET ME GO TO BED YALLLLL">
+      <change beforePath="$PROJECT_DIR$/PROJECT1/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/__main__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block00.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block00.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block01.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block01.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block02.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block02.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block03.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block03.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block04.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block04.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block05.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block05.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block06.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block06.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block07.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block07.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block08.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block08.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block09.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block09.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block10.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block10.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block11.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block11.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block12.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block12.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block13.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block13.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block14.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block14.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block15.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block15.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block16.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block16.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block17.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block17.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block18.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block18.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block19.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block19.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block20.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block20.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block21.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block21.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block22.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block22.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block23.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block23.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block24.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block24.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block25.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block25.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block26.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block26.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block27.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block27.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block28.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block28.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block29.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block29.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block30.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block30.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block31.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block31.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block32.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block32.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block33.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block33.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block34.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block34.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block35.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block35.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block36.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block36.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block37.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block37.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block38.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block38.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block39.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block39.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block40.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block40.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block41.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block41.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block42.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block42.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/output_no_number/block43.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/output_no_number/block43.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/spimi.py" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/spimi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT1/words2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/PROJECT1/words2.txt" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <splitter split-orientation="horizontal" split-proportion="0.43982685">
+      <split-first>
+        <splitter split-orientation="horizontal" split-proportion="0.8746667">
+          <split-first>
+            <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+              <file pinned="false" current-in-tab="true">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/spimi.py">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="83">
+                      <caret line="214" column="26" selection-start-line="214" selection-start-column="26" selection-end-line="214" selection-end-column="26" />
+                      <folding>
+                        <element signature="e#0#9#0" expanded="true" />
+                      </folding>
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/files/reut2-000.sgm">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="85">
+                      <caret line="3972" column="13" selection-start-line="3972" selection-start-column="13" selection-end-line="3972" selection-end-column="13" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block39.txt">
+                  <provider selected="true" editor-type-id="text-editor" />
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block42.txt">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="34">
+                      <caret line="2" column="3513" selection-start-line="2" selection-start-column="3513" selection-end-line="2" selection-end-column="3513" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block43.txt">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state>
+                      <caret column="1" selection-start-column="1" selection-end-column="1" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number43.txt">
+                  <provider selected="true" editor-type-id="text-editor" />
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/files/reut2-021.sgm">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="239462">
+                      <caret line="14086" column="60" selection-start-line="14086" selection-start-column="60" selection-end-line="14086" selection-end-column="60" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/README.md">
+                  <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+                    <state split_layout="SPLIT">
+                      <first_editor relative-caret-position="51">
+                        <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+                      </first_editor>
+                      <second_editor />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/nltk/tokenize/__init__.py">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="1700">
+                      <caret line="128" column="4" selection-start-line="128" selection-start-column="4" selection-end-line="128" selection-end-column="4" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+            </leaf>
+          </split-first>
+          <split-second>
+            <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+              <file pinned="false" current-in-tab="true">
+                <entry file="file://$PROJECT_DIR$/PROJECT1/spimi.py">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="167">
+                      <caret line="81" selection-start-line="81" selection-end-line="82" />
+                      <folding>
+                        <element signature="e#0#9#0" expanded="true" />
+                      </folding>
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+            </leaf>
+          </split-second>
+        </splitter>
+      </split-first>
+      <split-second>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/PROJECT1/__main__.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="238">
+                  <caret line="14" selection-start-line="14" selection-end-line="14" />
+                  <folding>
+                    <element signature="e#0#22#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/PROJECT1/words.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="11523960">
+                  <caret line="677880" selection-start-line="677880" selection-end-line="677880" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/codecs.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="5236">
+                  <caret line="309" selection-start-line="309" selection-end-line="309" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>21499</find>
+      <find>2100</find>
+      <find>19-OCT-1987</find>
+      <find>Treasury</find>
+      <find>26-FEB-1987</find>
+      <find>word_tokenize</find>
+      <find>NEWID</find>
+      <find>amex</find>
+      <find>injected</find>
+      <find>year</find>
+      <find>append</find>
+      <find>u0003</find>
+      <find>words.write</find>
+      <find>\u0002</find>
+      <find>block</find>
+      <find>&quot;: [561</find>
+      <find>561</find>
+      <find>561, 566, 959</find>
+      <find>'</find>
+      <find>tokenize</find>
+      <find>add_to_dict_if_not_number</find>
+      <find />
+      <find>21501</find>
+      <find>21001</find>
+      <find>erging</find>
+      <find>Ali</find>
+      <find>300-mln</find>
+      <find>31,841</find>
+      <find>no_number</find>
+      <find>add_to_dict</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/PROJECT1/SPIMI.py" />
+        <option value="$PROJECT_DIR$/LAB2/LAB2.py" />
+        <option value="$PROJECT_DIR$/LAB3/LAB3.py" />
+        <option value="$PROJECT_DIR$/PROJECT1/__init__.py" />
+        <option value="$PROJECT_DIR$/PROJECT1/block.txt" />
+        <option value="$PROJECT_DIR$/PROJECT1/block0.txt" />
+        <option value="$PROJECT_DIR$/PROJECT1/threads.py" />
+        <option value="$PROJECT_DIR$/LAB2/__main__.py" />
+        <option value="$PROJECT_DIR$/PROJECT1/reut2-001.sgm" />
+        <option value="$USER_HOME$/Downloads/479Project1.py" />
+        <option value="$PROJECT_DIR$/PROJECT1/files/reut2-021.sgm" />
+        <option value="$PROJECT_DIR$/PROJECT1/output/random" />
+        <option value="$PROJECT_DIR$/PROJECT1/output_test/output.txt" />
+        <option value="$PROJECT_DIR$/PROJECT1/output/block01.txt" />
+        <option value="$PROJECT_DIR$/PROJECT1/output/block00.txt" />
+        <option value="$PROJECT_DIR$/PROJECT1/table5.1" />
+        <option value="$PROJECT_DIR$/PROJECT1/README.md" />
+        <option value="$PROJECT_DIR$/PROJECT1/__main__.py" />
+        <option value="$PROJECT_DIR$/PROJECT1/spimi.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-6" />
+    <option name="width" value="972" />
+    <option name="height" value="1046" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP479-LABS" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP479-LABS" type="462c0819:PsiDirectoryNode" />
+              <item name="PROJECT1" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP479-LABS" type="462c0819:PsiDirectoryNode" />
+              <item name="PROJECT1" type="462c0819:PsiDirectoryNode" />
+              <item name="files" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP479-LABS" type="462c0819:PsiDirectoryNode" />
+              <item name="PROJECT1" type="462c0819:PsiDirectoryNode" />
+              <item name="output_no_number" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP479-LABS" type="462c0819:PsiDirectoryNode" />
+              <item name="PROJECT1" type="462c0819:PsiDirectoryNode" />
+              <item name="output_test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="COMP479-LABS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 (Project2) &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/PROJECT1" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="COMP479-LABS" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="COMP479-LABS" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\melid\PycharmProjects\COMP479-LABS\COMP479-LABS\PROJECT1\output_backup" />
+      <recent name="C:\Users\melid\PycharmProjects\COMP479-LABS\COMP479-LABS\PROJECT1" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\melid\PycharmProjects\COMP479-LABS\COMP479-LABS\PROJECT1" />
+      <recent name="C:\Users\melid\PycharmProjects\COMP479-LABS\COMP479-LABS\PROJECT1\output" />
+      <recent name="C:\Users\melid\PycharmProjects\COMP479-LABS\COMP479-LABS\PROJECT1\output_backup\output22222" />
+      <recent name="C:\Users\melid\PycharmProjects\COMP479-LABS\COMP479-LABS\PROJECT1\output_backup" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.__main__">
+    <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="COMP479-LABS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\melid\AppData\Local\Programs\Python\Python37-32\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PROJECT1" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PROJECT1/__main__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="threads" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="COMP479-LABS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PROJECT1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PROJECT1/threads.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.threads" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="32a3ffde-7f92-4426-ab97-033c58ed1d67" name="Default Changelist" comment="" />
+      <created>1570387141469</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1570387141469</updated>
+      <workItem from="1570387142832" duration="13561000" />
+      <workItem from="1570410673186" duration="20076000" />
+      <workItem from="1570996355604" duration="87165000" />
+      <workItem from="1571233484201" duration="4774000" />
+    </task>
+    <task id="LOCAL-00001" summary="made tuples out of articles">
+      <created>1570418298819</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1570418298819</updated>
+    </task>
+    <task id="LOCAL-00002" summary="modified spimi_invert to take tuples&#10;added iteration in main for 500 reuters articles - will need to change to match algorithm">
+      <created>1570424271111</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1570424271111</updated>
+    </task>
+    <task id="LOCAL-00003" summary="attempt to threading">
+      <created>1571007371671</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1571007371671</updated>
+    </task>
+    <task id="LOCAL-00004" summary="attempt to threading 2, giving up because it's too slow lol">
+      <created>1571010794372</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1571010794372</updated>
+    </task>
+    <task id="LOCAL-00005" summary="spimi 44 blocks">
+      <created>1571031648102</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1571031648102</updated>
+    </task>
+    <task id="LOCAL-00006" summary="dictionary works for small test file">
+      <created>1571112529942</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1571112529942</updated>
+    </task>
+    <task id="LOCAL-00007" summary="what i have from my dic so far">
+      <created>1571113677421</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1571113677421</updated>
+    </task>
+    <task id="LOCAL-00008" summary="printing whole dictionary without removing anything">
+      <created>1571195219842</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1571195219842</updated>
+    </task>
+    <task id="LOCAL-00009" summary="calling tokenize all now owrking">
+      <created>1571201996820</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1571201996820</updated>
+    </task>
+    <task id="LOCAL-00010" summary="FINAL DICT IS FKN WORKING LET ME GO TO BED YALLLLL">
+      <created>1571204540253</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1571204540253</updated>
+    </task>
+    <task id="LOCAL-00011" summary="FINAL DICT IS FKN WORKING LET ME GO TO BED YALLLLL">
+      <created>1571236333853</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1571236333853</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="125576000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1613" height="873" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2581888" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49946696" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7283237" visible="true" weight="0.5564516" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7206823" weight="0.38136512" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.2716763" side_tool="true" visible="true" weight="0.5564516" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4990366" weight="0.3293011" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.4968017" weight="0.23726977" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.32995737" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32995737" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22441365" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49946696" weight="0.32936078" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.75586355" weight="0.39219934" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7206823" visible="true" weight="0.38136512" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.2793177" side_tool="true" visible="true" weight="0.38136512" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49946696" weight="0.32936078" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.4968017" weight="0.115926325" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.32995737" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32995737" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="made tuples out of articles" />
+    <MESSAGE value="modified spimi_invert to take tuples&#10;added iteration in main for 500 reuters articles - will need to change to match algorithm" />
+    <MESSAGE value="attempt to threading" />
+    <MESSAGE value="attempt to threading 2, giving up because it's too slow lol" />
+    <MESSAGE value="spimi 44 blocks" />
+    <MESSAGE value="dictionary works for small test file" />
+    <MESSAGE value="what i have from my dic so far" />
+    <MESSAGE value="printing whole dictionary without removing anything" />
+    <MESSAGE value="calling tokenize all now owrking" />
+    <MESSAGE value="FINAL DICT IS FKN WORKING LET ME GO TO BED YALLLLL" />
+    <option name="LAST_COMMIT_MESSAGE" value="FINAL DICT IS FKN WORKING LET ME GO TO BED YALLLLL" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/PROJECT1/__main__.py</url>
+          <line>11</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/PROJECT1/spimi.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/PROJECT1/spimi.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/PROJECT1/spimi.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/PROJECT1/spimi.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/PROJECT1/spimi.py</url>
+          <line>237</line>
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/COMP479_LABS$__main__.coverage" NAME="__main__ Coverage Results" MODIFIED="1571242037915" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PROJECT1" />
+    <SUITE FILE_PATH="coverage/COMP479_LABS$threads.coverage" NAME="threads Coverage Results" MODIFIED="1570998453144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PROJECT1" />
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>values[0]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>values[0].split(',')</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(values[0].split(','))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>values</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>(values[0].split(',')</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len((values[0].split(','))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>values_list</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>ast.literal_eval(values)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>result[0]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block0.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret column="1432" selection-start-column="1432" selection-end-column="1432" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/dict.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret column="2238" selection-start-column="2238" selection-end-column="2238" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block23.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block24.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block25.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block26.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block27.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block28.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block29.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block30.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block31.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block32.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block33.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block34.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-34" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block35.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block36.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+      <provider editor-type-id="LargeFileEditor">
+        <state relative-caret-position="1003">
+          <caret column="1938" selection-start-column="1938" selection-end-column="1938" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block38.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/multiprocessing/dummy/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="122" selection-start-line="122" selection-end-line="122" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/jsbeautifier/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="73" column="4" selection-start-line="73" selection-start-column="4" selection-end-line="73" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/jsbeautifier/core/options.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3451">
+          <caret line="205" column="38" selection-start-line="205" selection-start-column="38" selection-end-line="205" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/multiprocessing/pool.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="360" selection-start-line="360" selection-end-line="360" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/re.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="214" column="4" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block41.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/ast.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block40.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block37.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block42.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
+        </state>
+      </provider>
+      <provider editor-type-id="LargeFileEditor">
+        <state relative-caret-position="-34" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block43.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="1" selection-start-column="1" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_backup/block01.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block01.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="8140" column="28" lean-forward="true" selection-start-line="8140" selection-start-column="28" selection-end-line="8140" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output/block00.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/.readme" />
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_backup/block00.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/words2_backup.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/table5.1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block41.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block40.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block39.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block42.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="3513" selection-start-line="2" selection-start-column="3513" selection-end-line="2" selection-end-column="3513" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number/block43.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="1" selection-start-column="1" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/output_no_number43.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/files/reut2-021.sgm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239462">
+          <caret line="14086" column="60" selection-start-line="14086" selection-start-column="60" selection-end-line="14086" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="51">
+            <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/nltk/tokenize/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1700">
+          <caret line="128" column="4" selection-start-line="128" selection-start-column="4" selection-end-line="128" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/words.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11523960">
+          <caret line="677880" selection-start-line="677880" selection-end-line="677880" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5236">
+          <caret line="309" selection-start-line="309" selection-end-line="309" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/files/reut2-000.sgm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="3972" column="13" selection-start-line="3972" selection-start-column="13" selection-end-line="3972" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/words2.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/spimi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="214" column="26" selection-start-line="214" selection-start-column="26" selection-end-line="214" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PROJECT1/__main__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
