@@ -9,4 +9,5 @@ merging_files = [f for f in listdir('./output') if isfile(join('./output', f))]
 # tokenize(files)
 
 merging_test = [f for f in listdir('./output_test') if isfile(join('./output_test', f))]
-mergeBlocks(merging_files)
+# mergeBlocks(merging_files)
+merge_blocks(merging_files)

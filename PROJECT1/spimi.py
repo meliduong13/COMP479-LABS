@@ -3,18 +3,50 @@ import json
 from multiprocessing.dummy import Pool as ThreadPool
 from os import listdir
 from os.path import isfile, join
+import jsbeautifier
+import ast
 
+opts = jsbeautifier.default_options()
 from bs4 import BeautifulSoup
 
 import nltk
 
 nltk.download('punkt')
+opts.indent_size = 0
+
+
+def merge_blocks(files):
+    dict_file = open("words2.txt", "w+")
+    dict_from_text = {}
+    for file in files:
+        with open('./output/' + file) as fp:
+            print(file)
+            line_counter = 0
+            for line in fp:
+                line_counter += 1
+                line_as_string = line
+                term = re.findall(r'"(.*?)"', line_as_string)
+                values = re.findall(r'": \[(.*?)\]', line_as_string)
+
+                if term is not None and len(term) is not 0:
+                    if term[0] not in dict_from_text.keys():
+                        dict_from_text[term[0]] = []
+                if values is not None and len(values) is not 0:
+                    values = values[0].replace(" ", "")
+                    values = values.split(',')
+                    try:
+                        values_as_int_list = list(map(int, values))
+                        dict_from_text[term[0]].extend(values_as_int_list)
+                    except:
+                        print(values_as_int_list)
+    dict_file.write(jsbeautifier.beautify(json.dumps(dict_from_text, sort_keys=True)))
+    dict_file.close()
+    print('done writing my whole dicionary!')
 
 
 def mergeBlocks(files):
     # files = [f for f in listdir('./files') if isfile(join('./files', f))]
     word_counter = 0
-    pattern = re.compile('\[\".*\",')
     words = open("words.txt", "w+")
     dict_from_text = {}
     word = ""
@@ -46,17 +78,17 @@ def mergeBlocks(files):
                     elif write_word is True and ch is "\"":
                         write_word = False
                         word += ch
-                        words.write(word)
-                        words.write('\n')
+                        if word not in dict_from_text.keys():
+                            words.write(word)
+                            words.write('\n')
                         if word not in dict_from_text.keys():
                             dict_from_text[word] = []
                         word_counter += 1
                     # get the list of ID for that word, remove all the brackets
                     elif write_word is False and word is not "" and ch is not "[" and ch is not "]":
                         id_list += ch
-
-    # if dict_from_text is not None and word in dict_from_text.keys():
-    #     dict_from_text[word] = dict_from_text[word].join(id_list)
+            if dict_from_text is not None and word in dict_from_text.keys() and id_list is not "":
+                dict_from_text[word].append(id_list)
     print(id_list)
     print(word_counter)
     print(len(dict_from_text.keys()))
@@ -92,6 +124,7 @@ def tokenize(files):
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
             text = nltk.word_tokenize(soup.get_text())
+            # text = re.sub(r'[0-9]+', '', text)
 
             # go through data, add tokens to dictionary. Count article number. write to disk every 500
             for word in text:
@@ -103,14 +136,17 @@ def tokenize(files):
                 if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
                     print(newid)
                     wrote_to_disk = True
-                    disk_write = open("./output/block" + str(block_write) + ".txt", "w+")
-                    disk_write.write(json.dumps(sorted(final_dict.items()), separators=(',', ':')))
+                    if len(str(block_write)) is 1:
+                        disk_write = open("./output/block0" + str(block_write) + ".txt", "w+")
+                    else:
+                        disk_write = open("./output/block" + str(block_write) + ".txt", "w+")
+                    disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
                     block_write += 1
                     final_dict = {}
     if len(final_dict) is not 0:
         disk_write = open("./output/block" + str(block_write) + ".txt", "w+")
-        disk_write.write(json.dumps(final_dict))
+        disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
 
 
