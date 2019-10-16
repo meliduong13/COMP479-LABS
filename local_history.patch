@@ -1,0 +1,65 @@
+Index: PROJECT1/__main__.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- PROJECT1/__main__.py	(date 1571004088808)
++++ PROJECT1/__main__.py	(date 1571004088808)
+@@ -3,30 +3,35 @@
+ from spimi import *
+ import threading
+ import queue
++from os import listdir
++from os.path import isfile, join
+ 
+ bloc_counter = 0
+-with open('reut2-001.sgm') as fp:
+-    soup = BeautifulSoup(fp, "html.parser")
+-    articles = soup.find_all('reuters')
+-    tuples = []
+-    que = queue.Queue()
+-    threads_list = list()
+-    articles_counter = 0
+-    pool = ThreadPool(len(articles))
++files = [f for f in listdir('./files') if isfile(join('./files', f))]
++
++for file in files:
++    with open('./files/' + file) as fp:
++        soup = BeautifulSoup(fp, "html.parser")
++        articles = soup.find_all('reuters')
++        tuples = []
++        que = queue.Queue()
++        threads_list = list()
++        articles_counter = 0
++        pool = ThreadPool(len(articles))
+ 
+-    if articles is not None:
+-        for article in articles:
+-            bloc_counter += bloc_counter
+-            tuples.append(pool.apply_async(tokenize_sgm, (articles, soup)))
+-            # th = threading.Thread(target=tokenize_sgm, args=(article, soup), name='thread' + str(articles_counter))
+-        for r in tuples:
+-            print(r.get())
++        if articles is not None:
++            for article in articles:
++                bloc_counter += bloc_counter
++                tuples.append(pool.apply_async(tokenize_sgm, (article, soup)))
++                # th = threading.Thread(target=tokenize_sgm, args=(article, soup), name='thread' + str(
++                # articles_counter))
++            for r in tuples:
++                print(r.get())
+ 
+-        # results = [r.get() for r in tuples]
+-        # print(results)
++            # results = [r.get() for r in tuples]
++            # print(results)
+ 
+-        pool.close()
+-        pool.join()
+-        # tuples.extend(tokenize_sgm(article, soup))
+-    #     # spimi_invert(tuples, bloc_counter)
+-
++            pool.close()
++            pool.join()
++            # tuples.extend(tokenize_sgm(article, soup))
++        #     # spimi_invert(tuples, bloc_counter)
