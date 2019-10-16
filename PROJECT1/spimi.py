@@ -15,11 +15,11 @@ nltk.download('punkt')
 opts.indent_size = 0
 
 
-def merge_blocks(files):
+def merge_blocks(files, dir):
     dict_file = open("words2.txt", "w+")
     dict_from_text = {}
     for file in files:
-        with open('./output/' + file) as fp:
+        with open(dir + file) as fp:
             print(file)
             line_counter = 0
             for line in fp:
@@ -236,7 +236,7 @@ def tokenize_all(files):
         print(block_write)
         print(len(final_dict))
         disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
-        disk_write.write(json.dumps(final_dict))
+        disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
 
 

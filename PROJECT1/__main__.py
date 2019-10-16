@@ -10,5 +10,5 @@ tokenize_all(files)
 
 merging_test = [f for f in listdir('./output_test') if isfile(join('./output_test', f))]
 # mergeBlocks(merging_files)
-#merge_blocks(merging_files)
+merge_blocks(merging_files, './output_no_number/')
 
