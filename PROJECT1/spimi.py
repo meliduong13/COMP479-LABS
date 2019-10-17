@@ -17,6 +17,17 @@ nltk.download('punkt')
 opts.indent_size = 0
 
 
+def sort_by_values_len_top_words(dict, num_top_words):
+    sorted_items = sorted(dict.items(), key=lambda item: len(item[1]), reverse=True)
+    counter = 0
+    top_words = []
+    for key, value in sorted_items:
+        if counter < num_top_words + 1:
+            print(key)
+            return top_words
+        counter += 1
+
+
 def merge_blocks(files, dir):
     dict_file = open("words2.txt", "w+")
     dict_from_text = {}
@@ -224,7 +235,10 @@ def tokenize_all(files):
     for file in files:
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
-            text = nltk.word_tokenize(soup.get_text())
+            text = soup.get_text()
+            text = ''.join(each for each in text if not each.isdigit())
+            text = text.lower()
+            text = nltk.word_tokenize(text)
             # TODO case folding
 
             # go through data, add tokens to dictionary. Count article number. write to disk every 500
@@ -247,11 +261,11 @@ def tokenize_all(files):
                     if word is "\x03":
                         print('heyyy')
                         print(newid)
-                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
                     else:
                         # never used
                         print('ahhhhhhhhhhhhhhhhhhh')
-                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid, my_dict=final_dict)
+                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
 
@@ -263,9 +277,9 @@ def tokenize_all(files):
                 # if not starting a new block, just add to dict
                 else:
                     if word is "\x03":
-                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
                     else:
-                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid, my_dict=final_dict)
+                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
     # remaining that has not been written to disk
     if len(final_dict) is not 0:
         print('last block')
