@@ -10,6 +10,7 @@ opts = jsbeautifier.default_options()
 from bs4 import BeautifulSoup
 
 import nltk
+
 nltk.download('punkt')
 
 opts.indent_size = 0
@@ -153,6 +154,7 @@ def tokenize(files):
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
 
+
 def add_to_dict(word, newid, my_dict):
     if word not in my_dict.keys():
         my_dict[word] = [newid]
@@ -191,8 +193,6 @@ def add_to_dict_if_not_number(word, newid, my_dict):
     return my_dict
 
 
-
-
 def tokenize_all(files):
     tuples = list()
     final_dict = {}
@@ -204,14 +204,14 @@ def tokenize_all(files):
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
             text = nltk.word_tokenize(soup.get_text())
-            #TODO case folding
-
+            # TODO case folding
 
             # go through data, add tokens to dictionary. Count article number. write to disk every 500
             for word in text:
                 if word is "\x03":
                     newid += 1
                     wrote_to_disk = False
+                # if writing to new block, write all previously added items to dictionary
                 if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
                     print(newid)
                     wrote_to_disk = True
@@ -222,21 +222,38 @@ def tokenize_all(files):
                     else:
                         print('else')
                         disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
-
+                    # write all previous data to file
+                    if word is "\x03":
+                        print('heyyy')
+                        print(newid)
+                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
+                    else:
+                        # never used
+                        print('ahhhhhhhhhhhhhhhhhhh')
+                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
-                    block_write += 1
-                    final_dict = {}
-                    final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
 
+                    # increment block number
+                    block_write += 1
+                    # reset dictionary
+                    final_dict = {}
+
+                # if not starting a new block, just add to dict
                 else:
-                    final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
+                    if word is "\x03":
+                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
+                    else:
+                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
     # remaining that has not been written to disk
     if len(final_dict) is not 0:
+        print('last block')
         print(block_write)
-        print(len(final_dict))
-        disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
+        if len(str(block_write)) is 1:
+            print('if')
+            disk_write = open("./output_no_number/block0" + str(block_write) + ".txt", "w+")
+        else:
+            print('else')
+            disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
-
-
