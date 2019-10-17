@@ -4,6 +4,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 from os import listdir
 from os.path import isfile, join
 import jsbeautifier
+import time
 import ast
 
 opts = jsbeautifier.default_options()
@@ -171,7 +172,16 @@ def is_number(s):
         return True
     except ValueError:
         pass
-
+    try:
+        int(s.replace(',', ''))
+        return True
+    except ValueError:
+        pass
+    try:
+        time.strptime(s, '%H:%M:%S.%f')
+        return True
+    except ValueError:
+        pass
     try:
         import unicodedata
         unicodedata.numeric(s)
@@ -184,6 +194,17 @@ def is_number(s):
 def add_to_dict_if_not_number(word, newid, my_dict):
     if is_number(word):
         return my_dict
+    if word not in my_dict.keys():
+        my_dict[word] = [newid]
+    else:
+        if newid not in my_dict[word]:
+            # if value doesn't exist in value list for given key
+            my_dict[word].append(newid)
+    return my_dict
+
+
+def add_to_dict_and_remove_case(word, newid, my_dict):
+    word = word.lower()
     if word not in my_dict.keys():
         my_dict[word] = [newid]
     else:
@@ -226,11 +247,11 @@ def tokenize_all(files):
                     if word is "\x03":
                         print('heyyy')
                         print(newid)
-                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid - 1, my_dict=final_dict)
                     else:
                         # never used
                         print('ahhhhhhhhhhhhhhhhhhh')
-                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
+                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
 
@@ -242,9 +263,9 @@ def tokenize_all(files):
                 # if not starting a new block, just add to dict
                 else:
                     if word is "\x03":
-                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid - 1, my_dict=final_dict)
                     else:
-                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
+                        final_dict = add_to_dict_and_remove_case(word=word, newid=newid, my_dict=final_dict)
     # remaining that has not been written to disk
     if len(final_dict) is not 0:
         print('last block')
