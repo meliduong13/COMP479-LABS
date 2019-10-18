@@ -245,7 +245,7 @@ def tokenize_all(files):
             soup = BeautifulSoup(fp, 'html.parser')
             text = soup.get_text()
             text = ''.join(each for each in text if not each.isdigit())
-            # text = text.lower()
+            text = text.lower()
             text = nltk.word_tokenize(text)
             total_terms += len(text)
             # TODO case folding
