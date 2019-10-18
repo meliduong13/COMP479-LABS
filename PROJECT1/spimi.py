@@ -55,6 +55,10 @@ def merge_blocks(files, dir):
     dict_file.write(jsbeautifier.beautify(json.dumps(dict_from_text, sort_keys=True)))
     dict_file.close()
     print('done writing my whole dicionary!')
+    total = 0
+    for key, value in dict_from_text.items():
+        total += len(value)
+    print('total length of values' + str(total))
 
 
 def mergeBlocks(files):
@@ -132,11 +136,13 @@ def tokenize(files):
     newid = 1
     block_write = 0
     wrote_to_disk = False
+    total = 0
 
     for file in files:
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
             text = nltk.word_tokenize(soup.get_text())
+            total += len(text)
             # text = re.sub(r'[0-9]+', '', text)
 
             # go through data, add tokens to dictionary. Count article number. write to disk every 500
@@ -165,6 +171,7 @@ def tokenize(files):
         disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
+    print('Total is' + total)
 
 
 def add_to_dict(word, newid, my_dict):
@@ -231,14 +238,16 @@ def tokenize_all(files):
     # open each file, remove unneeded tags, tokenize
     newid = 1
     block_write = 0
+    total_terms = 0
 
     for file in files:
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
             text = soup.get_text()
-            text = ''.join(each for each in text if not each.isdigit())
-            text = text.lower()
+            # text = ''.join(each for each in text if not each.isdigit())
+            # text = text.lower()
             text = nltk.word_tokenize(text)
+            total_terms += len(text)
             # TODO case folding
 
             # go through data, add tokens to dictionary. Count article number. write to disk every 500
@@ -292,3 +301,4 @@ def tokenize_all(files):
             disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
+    print('total terms' + str(total_terms))
