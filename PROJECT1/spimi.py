@@ -17,16 +17,46 @@ nltk.download('punkt')
 opts.indent_size = 0
 
 
-def sort_by_values_len_top_words(dict, num_top_words):
-    sorted_items = sorted(dict.items(), key=lambda item: len(item[1]), reverse=True)
-    counter = 0
-    top_words = []
-    for key, value in sorted_items:
-        if counter < num_top_words + 1:
-            print(key)
-            return top_words
-        counter += 1
+def sort_by_values_len_top_words(dict_to_order):
+    dict_file = open("words_in_order_of_frequency.txt", "w+")
+    print('hello')
+    sorted_items = sorted(dict_to_order.items(), key=lambda item: len(item[1]), reverse=True)
+    newd = dict(sorted_items)
+    for key in newd:
+        dict_file.writelines(key + '\n')
+    dict_file.close()
 
+
+def get_list_top_30_words():
+    top_30_words_list = []
+
+    with open('top_33_words.txt') as fp:
+        for line in fp:
+            if line is not "":
+                line = line.strip('\n')
+                top_30_words_list.append(line)
+    fp.close()
+    i = 0
+    for each in top_30_words_list:
+        i += 1
+        print(each + str(i))
+    return top_30_words_list
+
+
+def get_list_top_150_words():
+    top_150_words_list = []
+
+    with open('top_153_words.txt') as fp:
+        for line in fp:
+            if line is not "":
+                line = line.strip('\n')
+                top_150_words_list.append(line)
+    fp.close()
+    i = 0
+    for each in top_150_words_list:
+        i += 1
+        print(str(i) + each)
+    return top_150_words_list
 
 def merge_blocks(files, dir):
     dict_file = open("words2.txt", "w+")
@@ -52,13 +82,14 @@ def merge_blocks(files, dir):
                         dict_from_text[term[0]].extend(values_as_int_list)
                     except:
                         print(values_as_int_list)
-    dict_file.write(jsbeautifier.beautify(json.dumps(dict_from_text, sort_keys=True)))
+    sort_by_values_len_top_words(dict_from_text)
+    # dict_file.write(jsbeautifier.beautify(json.dumps(dict_from_text, sort_keys=True)))
     dict_file.close()
-    print('done writing my whole dicionary!')
-    total = 0
-    for key, value in dict_from_text.items():
-        total += len(value)
-    print('total length of values' + str(total))
+    # print('done writing my whole dicionary!')
+    # total = 0
+    # for key, value in dict_from_text.items():
+    #     total += len(value)
+    # print('total length of values' + str(total))
 
 
 def mergeBlocks(files):
