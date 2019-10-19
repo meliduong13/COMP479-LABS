@@ -1,9 +1,6 @@
-\x02
-\x03
 :
 f
 -
-\u0016\u0016\u0001f
 reute
 .
 ,
@@ -20,7 +17,6 @@ march
 <
 for
 >
-\u0005\u0005\u0005f
 usa
 it
 mln
@@ -28,3 +24,7 @@ on
 's
 dlrs
 its
+is
+from
+by
+at

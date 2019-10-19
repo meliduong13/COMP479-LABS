@@ -30,7 +30,7 @@ def sort_by_values_len_top_words(dict_to_order):
 def get_list_top_30_words():
     top_30_words_list = []
 
-    with open('top_33_words.txt') as fp:
+    with open('top_30_words_backup.txt') as fp:
         for line in fp:
             if line is not "":
                 line = line.strip('\n')
@@ -46,7 +46,7 @@ def get_list_top_30_words():
 def get_list_top_150_words():
     top_150_words_list = []
 
-    with open('top_153_words.txt') as fp:
+    with open('top_150_words_backup.txt') as fp:
         for line in fp:
             if line is not "":
                 line = line.strip('\n')
@@ -82,14 +82,14 @@ def merge_blocks(files, dir):
                         dict_from_text[term[0]].extend(values_as_int_list)
                     except:
                         print(values_as_int_list)
-    sort_by_values_len_top_words(dict_from_text)
-    # dict_file.write(jsbeautifier.beautify(json.dumps(dict_from_text, sort_keys=True)))
+    # sort_by_values_len_top_words(dict_from_text)
+    dict_file.write(jsbeautifier.beautify(json.dumps(dict_from_text, sort_keys=True)))
     dict_file.close()
-    # print('done writing my whole dicionary!')
-    # total = 0
-    # for key, value in dict_from_text.items():
-    #     total += len(value)
-    # print('total length of values' + str(total))
+    print('done writing my whole dicionary!')
+    total = 0
+    for key, value in dict_from_text.items():
+        total += len(value)
+    print('total length of values' + str(total))
 
 
 def mergeBlocks(files):
@@ -264,6 +264,8 @@ def add_to_dict_and_remove_case(word, newid, my_dict):
 
 
 def tokenize_all(files):
+    top30 = get_list_top_30_words()
+    top150 = get_list_top_150_words()
     tuples = list()
     final_dict = {}
     # open each file, remove unneeded tags, tokenize
@@ -278,6 +280,7 @@ def tokenize_all(files):
             text = ''.join(each for each in text if not each.isdigit())
             text = text.lower()
             text = nltk.word_tokenize(text)
+            text = [each for each in text if each not in top150]
             total_terms += len(text)
             # TODO case folding
 

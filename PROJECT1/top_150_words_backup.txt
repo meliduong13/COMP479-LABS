@@ -1,9 +1,6 @@
-\u0002
-\u0003
 :
 f
 -
-\\u0016\\u0016\\u0001f
 reute
 .
 ,
@@ -20,7 +17,6 @@ march
 <
 for
 >
-\\\u0005\\\u0005\\\u0005f
 usa
 it
 mln
@@ -65,7 +61,6 @@ have
 he
 also
 last
-\u0005\u0005\u0005rm
 one
 cts
 up
@@ -124,7 +119,6 @@ if
 trade
 five
 could
-\u0005\u0005\u0005c
 price
 there
 agreement
@@ -148,3 +142,9 @@ debt
 rate
 record
 month
+because
+blah
+between
+six
+when
+-oct
