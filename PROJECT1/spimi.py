@@ -13,7 +13,9 @@ from bs4 import BeautifulSoup
 import nltk
 
 nltk.download('punkt')
+from nltk.corpus import stopwords
 
+nltk.download("stopwords")
 opts.indent_size = 0
 
 
@@ -57,6 +59,7 @@ def get_list_top_150_words():
         i += 1
         print(str(i) + each)
     return top_150_words_list
+
 
 def merge_blocks(files, dir):
     dict_file = open("words2.txt", "w+")
@@ -264,8 +267,8 @@ def add_to_dict_and_remove_case(word, newid, my_dict):
 
 
 def tokenize_all(files):
-    top30 = get_list_top_30_words()
-    top150 = get_list_top_150_words()
+    top30 = stopwords.words('english')[0:30]
+    top150 = stopwords.words('english')[0:150]
     tuples = list()
     final_dict = {}
     # open each file, remove unneeded tags, tokenize
