@@ -5,14 +5,17 @@ from spimi import *
 
 bloc_counter = 0
 files = [f for f in listdir('./files') if isfile(join('./files', f))]
-merging_files = [f for f in listdir('./output_no_number') if isfile(join('./output_no_number', f))]
-
+# merging_files = [f for f in listdir('./output_no_number') if isfile(join('./output_no_number', f))]
+backup_files = [f for f in listdir('./output_after_all_compressions_copy') if isfile(join('./output_after_all_compressions_copy', f))]
+# merge_by_block_size(backup_files)
 # tokenize_all(files)
-# time.sleep(15)
 
 merging_test = [f for f in listdir('./output_test') if isfile(join('./output_test', f))]
-# mergeBlocks(merging_files)
-merge_blocks(merging_files, './output_no_number/')
+
+# merge_blocks(merging_files, './output_no_number/')
+merge_by_block_size(backup_files)
+
+
 
 # from nltk.corpus import stopwords
 # nltk.download("stopwords")
