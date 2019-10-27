@@ -16,23 +16,57 @@ nltk.download("stopwords")
 opts.indent_size = 0
 
 
-def merge_by_block_size(files):
-    x = 0
+def read_all_files_at_once(files):
+    dict_file_1 = 'final_dict_1'
+    dict_file_2 = 'final_dict_2'
+    dict_file_3 = 'final_dict_3'
     with contextlib.ExitStack() as stack:
-        fp_list = [stack.enter_context(open('./output_after_all_compressions_copy/' + fname)) for fname in files]
-        done_reading = set()
+        fp_list = [stack.enter_context(open('./output_after_all_compressions/' + fname)) for fname in files]
+        done_reading = 0
+        read_limit = 0
         print(len(fp_list))
         keep_looping = True
+        dict_block1 = {}
+        dict_block2 = {}
+        dict_block3 = {}
         while keep_looping:
             for fp in fp_list:
                 line_read = fp.readline()
-                if line_read is "":
-                    done_reading.add(fp_list.index(fp))
-                    if len(done_reading) is len(fp_list):
-                        keep_looping = False
-                else:
-                    print(line_read)
 
+                term = re.findall(r'"(.*?)"', line_read)
+                values = re.findall(r'": \[(.*?)\]', line_read)
+
+                if term is not None and len(term) is not 0:
+                    term = term[0]
+                if values is not None and len(values) is not 0:
+                    values = values[0].replace(" ", "")
+                    values = values.split(',')
+                    try:
+                        values = list(map(int, values))
+                    except:
+                        print(values)
+                    if 'a' <= term[0] <= 'f':
+                        add_to_dict_array(key=term, values=values, my_dict=dict_block1)
+                    elif 'g' <= term[0] <= 'm':
+                        add_to_dict_array(key=term, values=values, my_dict=dict_block2)
+                    else:
+                        add_to_dict_array(key=term, values=values, my_dict=dict_block3)
+                if line_read is "}":
+                    done_reading += 1
+                    if done_reading is len(fp_list):
+                        keep_looping = False
+
+    disk_write_1 = open("./final_dict/" + str(dict_file_1) + ".txt", "w+")
+    disk_write_1.write(jsbeautifier.beautify(json.dumps(dict_block1, sort_keys=True)))
+    disk_write_1.close()
+
+    disk_write_2 = open("./final_dict/" + str(dict_file_2) + ".txt", "w+")
+    disk_write_2.write(jsbeautifier.beautify(json.dumps(dict_block2, sort_keys=True)))
+    disk_write_2.close()
+
+    disk_write_3 = open("./final_dict/" + str(dict_file_3) + ".txt", "w+")
+    disk_write_3.write(jsbeautifier.beautify(json.dumps(dict_block3, sort_keys=True)))
+    disk_write_3.close()
 
 
 def get_list_top_30_words():
@@ -101,13 +135,23 @@ def merge_blocks(files, dir):
     print('total length of values' + str(total))
 
 
-def add_to_dict(word, newid, my_dict):
-    if word not in my_dict.keys():
-        my_dict[word] = [newid]
+def add_to_dict_array(key, values, my_dict):
+    if key not in my_dict.keys():
+        my_dict[key] = values
     else:
-        if newid not in my_dict[word]:
+        if values not in my_dict[key]:
             # if value doesn't exist in value list for given key
-            my_dict[word].append(newid)
+            my_dict[key] += values
+    return my_dict
+
+
+def add_to_dict(key, value, my_dict):
+    if key not in my_dict.keys():
+        my_dict[key] = [value]
+    else:
+        if value not in my_dict[key]:
+            # if value doesn't exist in value list for given key
+            my_dict[key].append(value)
     return my_dict
 
 
@@ -152,11 +196,11 @@ def tokenize_all(files):
                     if word is "\x03":
                         print('heyyy')
                         print(newid)
-                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
                     else:
                         # never used
                         print('ahhhhhhhhhhhhhhhhhhh')
-                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
+                        final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
 
@@ -168,9 +212,9 @@ def tokenize_all(files):
                 # if not starting a new block, just add to dict
                 else:
                     if word is "\x03":
-                        final_dict = add_to_dict(word=word, newid=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
                     else:
-                        final_dict = add_to_dict(word=word, newid=newid, my_dict=final_dict)
+                        final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
     # remaining that has not been written to disk
     if len(final_dict) is not 0:
         print('last block')

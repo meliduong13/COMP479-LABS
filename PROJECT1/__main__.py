@@ -6,14 +6,14 @@ from spimi import *
 bloc_counter = 0
 files = [f for f in listdir('./files') if isfile(join('./files', f))]
 # merging_files = [f for f in listdir('./output_no_number') if isfile(join('./output_no_number', f))]
-backup_files = [f for f in listdir('./output_after_all_compressions_copy') if isfile(join('./output_after_all_compressions_copy', f))]
+backup_files = [f for f in listdir('./output_after_all_compressions') if isfile(join('./output_after_all_compressions', f))]
 # merge_by_block_size(backup_files)
 # tokenize_all(files)
 
 merging_test = [f for f in listdir('./output_test') if isfile(join('./output_test', f))]
 
-# merge_blocks(merging_files, './output_no_number/')
-merge_by_block_size(backup_files)
+# merge_blocks(backup_files, './output_after_all_compressions/')
+read_all_files_at_once(backup_files)
 
 
 
