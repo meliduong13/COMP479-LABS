@@ -17,18 +17,15 @@ opts.indent_size = 0
 
 
 def read_all_files_at_once(files):
-    dict_file_1 = 'final_dict_1'
-    dict_file_2 = 'final_dict_2'
-    dict_file_3 = 'final_dict_3'
+    dict_filename_prefix = 'final'
+    dict_block_number = 0
+    read_limit = 0
     with contextlib.ExitStack() as stack:
         fp_list = [stack.enter_context(open('./output_after_all_compressions/' + fname)) for fname in files]
         done_reading = 0
-        read_limit = 0
         print(len(fp_list))
         keep_looping = True
-        dict_block1 = {}
-        dict_block2 = {}
-        dict_block3 = {}
+        dict_block = {}
         while keep_looping:
             for fp in fp_list:
                 line_read = fp.readline()
@@ -44,29 +41,35 @@ def read_all_files_at_once(files):
                     try:
                         values = list(map(int, values))
                     except:
-                        print(values)
-                    if 'a' <= term[0] <= 'f':
-                        add_to_dict_array(key=term, values=values, my_dict=dict_block1)
-                    elif 'g' <= term[0] <= 'm':
-                        add_to_dict_array(key=term, values=values, my_dict=dict_block2)
-                    else:
-                        add_to_dict_array(key=term, values=values, my_dict=dict_block3)
+                        print('error:'+values)
+                    result = add_to_dict_array(key=term, values=values, my_dict=dict_block)
+                    dict_block = result[0]
+                    is_new_term = result[1]
+                    if is_new_term is True:
+                        read_limit += 1
+                # if the term added
+                if read_limit % 25000 == 0 and read_limit is not 0:
+                    print('number of terms so far: ' + str(read_limit))
+                    dict_block_number += 1
+                    disk_write = open(
+                        "./final_dict/" + str(dict_filename_prefix) + str(
+                            dict_block_number) + ".txt", "w+")
+                    disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
+                    disk_write.close()
+                    dict_block = {}
                 if line_read is "}":
                     done_reading += 1
                     if done_reading is len(fp_list):
                         keep_looping = False
 
-    disk_write_1 = open("./final_dict/" + str(dict_file_1) + ".txt", "w+")
-    disk_write_1.write(jsbeautifier.beautify(json.dumps(dict_block1, sort_keys=True)))
-    disk_write_1.close()
-
-    disk_write_2 = open("./final_dict/" + str(dict_file_2) + ".txt", "w+")
-    disk_write_2.write(jsbeautifier.beautify(json.dumps(dict_block2, sort_keys=True)))
-    disk_write_2.close()
-
-    disk_write_3 = open("./final_dict/" + str(dict_file_3) + ".txt", "w+")
-    disk_write_3.write(jsbeautifier.beautify(json.dumps(dict_block3, sort_keys=True)))
-    disk_write_3.close()
+    if len(dict_block) is not 0:
+        print('remaining terms printed in last block')
+        dict_block_number += 1
+        disk_write = open(
+            "./final_dict/" + str(dict_filename_prefix) + str(
+                dict_block_number) + ".txt", "w+")
+        disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
+        disk_write.close()
 
 
 def get_list_top_30_words():
@@ -136,13 +139,18 @@ def merge_blocks(files, dir):
 
 
 def add_to_dict_array(key, values, my_dict):
+    is_new_term = True
     if key not in my_dict.keys():
         my_dict[key] = values
+        is_new_term = True
+
     else:
         if values not in my_dict[key]:
             # if value doesn't exist in value list for given key
             my_dict[key] += values
-    return my_dict
+        if key in my_dict.keys():
+            is_new_term = False
+    return my_dict, is_new_term
 
 
 def add_to_dict(key, value, my_dict):

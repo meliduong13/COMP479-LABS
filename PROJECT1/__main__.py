@@ -7,6 +7,7 @@ bloc_counter = 0
 files = [f for f in listdir('./files') if isfile(join('./files', f))]
 # merging_files = [f for f in listdir('./output_no_number') if isfile(join('./output_no_number', f))]
 backup_files = [f for f in listdir('./output_after_all_compressions') if isfile(join('./output_after_all_compressions', f))]
+backup_files_copy = [f for f in listdir('./output_after_all_compressions_copy') if isfile(join('./output_after_all_compressions_copy', f))]
 # merge_by_block_size(backup_files)
 # tokenize_all(files)
 
