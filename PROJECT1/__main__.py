@@ -20,7 +20,7 @@ merging_test = [f for f in listdir('./output_test') if isfile(join('./output_tes
 # read_all_files_at_once(backup_files)
 
 final_dict_files = [f for f in listdir('./final_dict') if isfile(join('./final_dict', f))]
-search_final_dict_or_query(query="environmentalist ecologist", files=final_dict_files, files_dir='./final_dict/',
+search_final_dict_or_query(query="jimmy carter", files=final_dict_files, files_dir='./final_dict/',
                            query_type='or')
 
 # from nltk.corpus import stopwords

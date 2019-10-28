@@ -16,6 +16,14 @@ nltk.download("stopwords")
 opts.indent_size = 0
 
 
+def sort_by_values_len(my_dict):
+    dict_len = {key: len(value) for key, value in my_dict.items()}
+    import operator
+    sorted_key_list = sorted(dict_len.items(), key=operator.itemgetter(1), reverse=True)
+    sorted_dict = [{item[0]: my_dict[item[0]]} for item in sorted_key_list]
+    return sorted_dict
+
+
 def search_final_dict_or_query(query, files, files_dir, query_type):
     query_type = query_type
     top150 = stopwords.words('english')[0:150]
@@ -56,8 +64,25 @@ def search_final_dict_or_query(query, files, files_dir, query_type):
     elif query_type is 'or':
         print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
         print('\nResults for the "or" query ' + "\"" + user_search + "\"")
-        print(sorted(set.union(*map(set, (keywords_dict.values())))))
+        list_of_or_query = sorted(set.union(*map(set, (keywords_dict.values()))))
 
+        dict_or_query = {}
+        for each_id in list_of_or_query:
+            for word, doc_id_list in keywords_dict.items():
+                if each_id in doc_id_list:
+                    if each_id not in dict_or_query:
+                        dict_or_query[each_id] = [word]
+                    else:
+                        dict_or_query[each_id] += [word]
+        sorted_by_frequency_of_keys = sort_by_values_len(dict_or_query)
+        # print(jsbeautifier.beautify(json.dumps(sort_by_values_len(dict_or_query), sort_keys=True)))
+        for each in sorted_by_frequency_of_keys:
+            print(each)
+
+        all_keys = []
+        for each in sorted_by_frequency_of_keys:
+            all_keys += each.keys()
+        print(all_keys)
 
 def read_all_files_at_once(files):
     dict_filename_prefix = 'final'
