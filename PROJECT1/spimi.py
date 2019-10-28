@@ -16,6 +16,49 @@ nltk.download("stopwords")
 opts.indent_size = 0
 
 
+def search_final_dict_or_query(query, files, files_dir, query_type):
+    query_type = query_type
+    top150 = stopwords.words('english')[0:150]
+    keywords_dict = {}
+    user_search = query
+    query = query.split()
+    for each in query:
+        each = each.lower()
+        if each not in top150:
+            keywords_dict[each] = []
+    for file in files:
+        with open(files_dir + file) as fp:
+            for line in fp:
+                term = re.findall(r'"(.*?)"', line)
+                values = re.findall(r'": \[(.*?)\]', line)
+                # if the term exists
+                if term is not None and len(term) is not 0:
+                    term = term[0]
+                    # if the keyword is equal to the dictionary term
+                    if term in keywords_dict.keys():
+                        # get values and add to the keywords dict
+                        if values is not None and len(values) is not 0:
+                            values = values[0].replace(" ", "")
+                            values = values.split(',')
+                            try:
+                                values = list(map(int, values))
+                                keywords_dict[term] += values
+                                keywords_dict[term].sort()
+                            except:
+                                print('error:' + values)
+    if len(keywords_dict) is 1:
+        print('\nResults for the "and" query ' + "\"" + user_search + "\"")
+        print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+    elif query_type is 'and':
+        print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        print('\nResults for the "and" query ' + "\"" + user_search + "\"")
+        print(sorted(set.intersection(*map(set, (keywords_dict.values())))))
+    elif query_type is 'or':
+        print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        print('\nResults for the "or" query ' + "\"" + user_search + "\"")
+        print(sorted(set.union(*map(set, (keywords_dict.values())))))
+
+
 def read_all_files_at_once(files):
     dict_filename_prefix = 'final'
     dict_block_number = 0
@@ -41,7 +84,7 @@ def read_all_files_at_once(files):
                     try:
                         values = list(map(int, values))
                     except:
-                        print('error:'+values)
+                        print('error:' + values)
                     result = add_to_dict_array(key=term, values=values, my_dict=dict_block)
                     dict_block = result[0]
                     is_new_term = result[1]
@@ -148,6 +191,7 @@ def add_to_dict_array(key, values, my_dict):
         if values not in my_dict[key]:
             # if value doesn't exist in value list for given key
             my_dict[key] += values
+            my_dict[key].sort()
         if key in my_dict.keys():
             is_new_term = False
     return my_dict, is_new_term

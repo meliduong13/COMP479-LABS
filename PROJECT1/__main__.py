@@ -6,17 +6,22 @@ from spimi import *
 bloc_counter = 0
 files = [f for f in listdir('./files') if isfile(join('./files', f))]
 # merging_files = [f for f in listdir('./output_no_number') if isfile(join('./output_no_number', f))]
-backup_files = [f for f in listdir('./output_after_all_compressions') if isfile(join('./output_after_all_compressions', f))]
-backup_files_copy = [f for f in listdir('./output_after_all_compressions_copy') if isfile(join('./output_after_all_compressions_copy', f))]
+backup_files = [f for f in listdir('./output_after_all_compressions') if
+                isfile(join('./output_after_all_compressions', f))]
+backup_files_copy = [f for f in listdir('./output_after_all_compressions_copy') if
+                     isfile(join('./output_after_all_compressions_copy', f))]
 # merge_by_block_size(backup_files)
 # tokenize_all(files)
 
 merging_test = [f for f in listdir('./output_test') if isfile(join('./output_test', f))]
 
 # merge_blocks(backup_files, './output_after_all_compressions/')
-read_all_files_at_once(backup_files)
 
+# read_all_files_at_once(backup_files)
 
+final_dict_files = [f for f in listdir('./final_dict') if isfile(join('./final_dict', f))]
+search_final_dict_or_query(query="environmentalist ecologist", files=final_dict_files, files_dir='./final_dict/',
+                           query_type='or')
 
 # from nltk.corpus import stopwords
 # nltk.download("stopwords")
