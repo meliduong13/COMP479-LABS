@@ -11,6 +11,9 @@ import nltk
 
 nltk.download('punkt')
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.tokenize import sent_tokenize, word_tokenize
+
 
 nltk.download("stopwords")
 opts.indent_size = 0
@@ -250,6 +253,7 @@ def tokenize_all(reuters_files, output_dir):
     newid = 1
     block_write = 0
     total_terms = 0
+    ps = PorterStemmer()
 
     for file in reuters_files:
         with open('./files/' + file) as fp:
@@ -260,32 +264,33 @@ def tokenize_all(reuters_files, output_dir):
             text = nltk.word_tokenize(text)
             # if token is not in top 150
             text = [each for each in text if each not in top150]
+            text = [ps.stem(each) for each in text]
             total_terms += len(text)
 
-            # go through data, add tokens to dictionary. Count article number. write to disk every 500
+            # each word becomes a token in a dictionary. Every 500 terms, write those to disk
             for word in text:
                 if word is "\x03":
                     newid += 1
                     wrote_to_disk = False
                 # if writing to new block, write all previously added items to dictionary
                 if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
-                    print(newid)
+                    print('reached article' + str(newid))
                     wrote_to_disk = True
 
                     if len(str(block_write)) is 1:
                         print('if')
                         disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
                     else:
-                        print('else')
+                        # print('else')
                         disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
                     # write all previous data to file
                     if word is "\x03":
-                        print('heyyy')
-                        print(newid)
+                        # print('heyyy')
+                        print('reached article' + str(newid))
                         final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
                     else:
                         # never used
-                        print('ahhhhhhhhhhhhhhhhhhh')
+                        # print('ahhhhhhhhhhhhhhhhhhh')
                         final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
