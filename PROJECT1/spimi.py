@@ -24,7 +24,7 @@ def sort_by_values_len(my_dict):
     return sorted_dict
 
 
-def search_final_dict_or_query(query, files, files_dir, query_type):
+def search_final_dict(query, files, files_dir, query_type):
     query_type = query_type
     top150 = stopwords.words('english')[0:150]
     keywords_dict = {}
@@ -55,15 +55,19 @@ def search_final_dict_or_query(query, files, files_dir, query_type):
                             except:
                                 print('error:' + values)
     if len(keywords_dict) is 1:
-        print('\nResults for the "and" query ' + "\"" + user_search + "\"")
-        print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        print('\nResults for the single word query ' + "\"" + user_search + "\"")
+        print('\n'+jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
     elif query_type is 'and':
-        print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        # print('\n*****************Dictionary content **********************')
+        # print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        # print('\n*****************Dictionary content**********************')
         print('\nResults for the "and" query ' + "\"" + user_search + "\"")
         print(sorted(set.intersection(*map(set, (keywords_dict.values())))))
     elif query_type is 'or':
-        print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
-        print('\nResults for the "or" query ' + "\"" + user_search + "\"")
+        # print('\n*****************Dictionary content**********************')
+        # print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        # print('\n*****************Dictionary result**********************')
+        print('\nResults with keywords contained in each article for the "or" query ' + "\"" + user_search + "\"")
         list_of_or_query = sorted(set.union(*map(set, (keywords_dict.values()))))
 
         dict_or_query = {}
@@ -82,14 +86,19 @@ def search_final_dict_or_query(query, files, files_dir, query_type):
         all_keys = []
         for each in sorted_by_frequency_of_keys:
             all_keys += each.keys()
+        print('\nResults in a list format for the "or" query ' + "\"" + user_search + "\"")
+        print(
+            'All results are in order of frequency. Articles at the beginning of the list contain the most keywords. '
+            'Articles at the end of the list contain the least.')
         print(all_keys)
 
-def read_all_files_at_once(files):
+
+def read_all_files_at_once_and_make_final_dict(blocks_produced_from_tokenization, input_dir, output_dir):
     dict_filename_prefix = 'final'
     dict_block_number = 0
     read_limit = 0
     with contextlib.ExitStack() as stack:
-        fp_list = [stack.enter_context(open('./output_after_all_compressions/' + fname)) for fname in files]
+        fp_list = [stack.enter_context(open(input_dir + fname)) for fname in blocks_produced_from_tokenization]
         done_reading = 0
         print(len(fp_list))
         keep_looping = True
@@ -117,10 +126,10 @@ def read_all_files_at_once(files):
                         read_limit += 1
                 # if the term added
                 if read_limit % 25000 == 0 and read_limit is not 0:
-                    print('number of terms so far: ' + str(read_limit))
+                    print('number of terms processed so far: ' + str(read_limit))
                     dict_block_number += 1
                     disk_write = open(
-                        "./final_dict/" + str(dict_filename_prefix) + str(
+                        output_dir + str(dict_filename_prefix) + str(
                             dict_block_number) + ".txt", "w+")
                     disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
                     disk_write.close()
@@ -131,10 +140,10 @@ def read_all_files_at_once(files):
                         keep_looping = False
 
     if len(dict_block) is not 0:
-        print('remaining terms printed in last block')
+        print('remaining terms processed in last block')
         dict_block_number += 1
         disk_write = open(
-            "./final_dict/" + str(dict_filename_prefix) + str(
+            output_dir + str(dict_filename_prefix) + str(
                 dict_block_number) + ".txt", "w+")
         disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
         disk_write.close()
@@ -232,7 +241,7 @@ def add_to_dict(key, value, my_dict):
     return my_dict
 
 
-def tokenize_all(files):
+def tokenize_all(reuters_files, output_dir):
     top30 = stopwords.words('english')[0:30]
     top150 = stopwords.words('english')[0:150]
     tuples = list()
@@ -242,7 +251,7 @@ def tokenize_all(files):
     block_write = 0
     total_terms = 0
 
-    for file in files:
+    for file in reuters_files:
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
             text = soup.get_text()
@@ -265,10 +274,10 @@ def tokenize_all(files):
 
                     if len(str(block_write)) is 1:
                         print('if')
-                        disk_write = open("./output_no_number/block0" + str(block_write) + ".txt", "w+")
+                        disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
                     else:
                         print('else')
-                        disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
+                        disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
                     # write all previous data to file
                     if word is "\x03":
                         print('heyyy')
@@ -298,10 +307,10 @@ def tokenize_all(files):
         print(block_write)
         if len(str(block_write)) is 1:
             print('if')
-            disk_write = open("./output_no_number/block0" + str(block_write) + ".txt", "w+")
+            disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
         else:
             print('else')
-            disk_write = open("./output_no_number/block" + str(block_write) + ".txt", "w+")
+            disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
     print('total terms' + str(total_terms))
