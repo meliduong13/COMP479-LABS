@@ -59,5 +59,6 @@ Results for the "and" query "Innovations in telecommunication"
 ```
 
 Results for the "or" query "environmentalist ecologist"
-```json[5774]
+```json
+[5774]
 ```
