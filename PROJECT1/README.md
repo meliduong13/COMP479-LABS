@@ -1,3 +1,19 @@
+# To run spimi's algorithm:
+in 
+```__main.py__```
+uncomment 
+```# spimi(files, disk_files, './DISK/', './DISK_FINAL/')``` 
+this will create your final dictionary in the directory '/FINAL_DICT'
+
+# TO make search queries:
+run 
+```search_final_dict```
+to run your query, replace the values in quotation marks after
+```query = ```
+choose your type of query "or" / "and" and replace the values after
+```query_type= ```
+
+# lossy compression techniques results
 |                   | distinct terms | non positional postings | number of positional postings |
 | ---:              | :---:          | :---:                   |  :---:                        |
 | unfiltered        | 147,047        | 2,226,432               | 3,516,607                     |

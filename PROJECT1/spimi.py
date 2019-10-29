@@ -249,7 +249,6 @@ def add_to_dict(key, value, my_dict):
 def tokenize_all(reuters_files, output_dir):
     top30 = stopwords.words('english')[0:30]
     top150 = stopwords.words('english')[0:150]
-    tuples = list()
     final_dict = {}
     # open each file, remove unneeded tags, tokenize
     newid = 1
@@ -274,6 +273,7 @@ def tokenize_all(reuters_files, output_dir):
 
             # each word becomes a token in a dictionary. Every 500 terms, write those to disk
             for word in text:
+                # this words signals the end of an article
                 if word is "\x03":
                     newid += 1
                     wrote_to_disk = False
@@ -283,19 +283,14 @@ def tokenize_all(reuters_files, output_dir):
                     wrote_to_disk = True
 
                     if len(str(block_write)) is 1:
-                        # print('if')
                         disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
                     else:
                         # print('else')
                         disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
-                    # write all previous data to file
                     if word is "\x03":
-                        # print('heyyy')
                         print('reached article ' + str(newid))
                         final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
                     else:
-                        # never used
-                        # print('ahhhhhhhhhhhhhhhhhhh')
                         final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
@@ -311,16 +306,14 @@ def tokenize_all(reuters_files, output_dir):
                         final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
                     else:
                         final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
-    # remaining that has not been written to disk
+    # remaining that has not been written to disk is written to the last block
     if len(final_dict) is not 0:
-        print('last block to write')
+        print('last block to write with remaining terms')
         print(block_write)
         if len(str(block_write)) is 1:
-            print('if')
             disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
         else:
-            print('else')
             disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
-    print('total terms' + str(total_terms))
+    print('total number of terms ' + str(total_terms))
