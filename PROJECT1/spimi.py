@@ -14,11 +14,12 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-
 nltk.download("stopwords")
 opts.indent_size = 0
 
 
+# this method is used to sort dictionary items by length of their value
+# the value of the dictionary contains a list of items
 def sort_by_values_len(my_dict):
     dict_len = {key: len(value) for key, value in my_dict.items()}
     import operator
@@ -27,6 +28,11 @@ def sort_by_values_len(my_dict):
     return sorted_dict
 
 
+# the final dictionary spreads over 4 files in the directory 'DISK_FINAL'
+# this method searches from those files for an 'AND' or 'OR' query
+# to do that it reads each file, line by line, retrieves the key and values per line
+# then verifies whether the searched words in the query are contained in the dictionary
+# if they are, the values of the list of ids is retrieved
 def search_final_dict(query, files, files_dir, query_type):
     query_type = query_type
     top150 = stopwords.words('english')[0:150]
@@ -59,7 +65,7 @@ def search_final_dict(query, files, files_dir, query_type):
                                 print('error:' + values)
     if len(keywords_dict) is 1:
         print('\nResults for the single word query ' + "\"" + user_search + "\"")
-        print('\n'+jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
     elif query_type is 'and':
         # print('\n*****************Dictionary content **********************')
         # print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
@@ -96,6 +102,13 @@ def search_final_dict(query, files, files_dir, query_type):
         print(all_keys)
 
 
+# this method reads from the 44 blocks of dictionary that were first produced
+#  each dictionary block is distributed in one of the 44 files in the directory 'DISK'
+# it then opens up the 44 files, had a file parser point to each of the files
+# each of the 44 lines are read one after the other, where each line is from 1 of the 44 different files
+# after 25000 unique terms are found, a dictionary made of those 25000 terms is written into a file in the directory
+# 'DISK_FINAL'
+# that dicitonary is erased, then the next 25000 terms are read, written to a file, and so on
 def read_all_files_at_once_and_make_final_dict(blocks_produced_from_tokenization, input_dir, output_dir):
     dict_filename_prefix = 'final'
     dict_block_number = 0
@@ -152,38 +165,12 @@ def read_all_files_at_once_and_make_final_dict(blocks_produced_from_tokenization
         disk_write.close()
 
 
-def get_list_top_30_words():
-    top_30_words_list = []
-
-    with open('top_30_words_backup.txt') as fp:
-        for line in fp:
-            if line is not "":
-                line = line.strip('\n')
-                top_30_words_list.append(line)
-    fp.close()
-    i = 0
-    for each in top_30_words_list:
-        i += 1
-        print(each + str(i))
-    return top_30_words_list
-
-
-def get_list_top_150_words():
-    top_150_words_list = []
-
-    with open('top_150_words_backup.txt') as fp:
-        for line in fp:
-            if line is not "":
-                line = line.strip('\n')
-                top_150_words_list.append(line)
-    fp.close()
-    i = 0
-    for each in top_150_words_list:
-        i += 1
-        print(str(i) + each)
-    return top_150_words_list
-
-
+# this method is used to generate the final dictionary into a single file
+# it reads the 44 blocks in the direcotry 'DISK', where each 500 reuters articles is written to dictionary into a
+# single file, and merges those 44 blocks into a single dictionary
+# it is NOT used for the SPIMI algorithm
+# It's only purpose is to help generate the table based on the book's table 5.1
+# it is used to retrieve the number of unique terms the dictionary contains depending on the compression technique used
 def merge_blocks(files, dir):
     dict_file = open("words2.txt", "w+")
     dict_from_text = {}
@@ -218,6 +205,11 @@ def merge_blocks(files, dir):
     print('total length of values' + str(total))
 
 
+# small helper method to write a word and newid to dictionary
+# it returns the dictionary with newly added terms and/or newid value
+# it also returns a boolean to indicate whether the word added to dictionary already exists or not
+# if the word already exists in the dictionary, return false
+# if the word doesn't exist in the dictionary, return true
 def add_to_dict_array(key, values, my_dict):
     is_new_term = True
     if key not in my_dict.keys():
@@ -234,6 +226,8 @@ def add_to_dict_array(key, values, my_dict):
     return my_dict, is_new_term
 
 
+# small helper method used to write a owrd and newid to dicionary
+#  it is used to generate 44 dictionary blocks
 def add_to_dict(key, value, my_dict):
     if key not in my_dict.keys():
         my_dict[key] = [value]
@@ -243,7 +237,15 @@ def add_to_dict(key, value, my_dict):
             my_dict[key].append(value)
     return my_dict
 
-
+# first step in the SPIMI algorithm
+# the reuters files are tokenized and written to 44 different dictionaries, where every dictionary is written to a file
+# and each 500 reuters article parsed is written to a dictionary
+# the tokenization uses a combinaison lossy dictionary compression techniques
+# the techniques used are the ones generated in the report's table:
+# removal of numbers
+# case folding
+# removal of 150 stop words provided by the nltk library
+# porter stemming (only used for table 5.1 not for the dictionary used for the queries
 def tokenize_all(reuters_files, output_dir):
     top30 = stopwords.words('english')[0:30]
     top150 = stopwords.words('english')[0:150]
@@ -255,6 +257,7 @@ def tokenize_all(reuters_files, output_dir):
     total_terms = 0
     ps = PorterStemmer()
 
+    print('starting to write a dictionary every 500 reuters articles...')
     for file in reuters_files:
         with open('./files/' + file) as fp:
             soup = BeautifulSoup(fp, 'html.parser')
@@ -264,7 +267,9 @@ def tokenize_all(reuters_files, output_dir):
             text = nltk.word_tokenize(text)
             # if token is not in top 150
             text = [each for each in text if each not in top150]
-            text = [ps.stem(each) for each in text]
+
+            # use of porter stemmer for the table 5.1 but not for the final dictionary that was queried
+            # text = [ps.stem(each) for each in text]
             total_terms += len(text)
 
             # each word becomes a token in a dictionary. Every 500 terms, write those to disk
@@ -274,11 +279,11 @@ def tokenize_all(reuters_files, output_dir):
                     wrote_to_disk = False
                 # if writing to new block, write all previously added items to dictionary
                 if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
-                    print('reached article' + str(newid))
+                    print('reached article ' + str(newid))
                     wrote_to_disk = True
 
                     if len(str(block_write)) is 1:
-                        print('if')
+                        # print('if')
                         disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
                     else:
                         # print('else')
@@ -286,7 +291,7 @@ def tokenize_all(reuters_files, output_dir):
                     # write all previous data to file
                     if word is "\x03":
                         # print('heyyy')
-                        print('reached article' + str(newid))
+                        print('reached article ' + str(newid))
                         final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
                     else:
                         # never used
@@ -308,7 +313,7 @@ def tokenize_all(reuters_files, output_dir):
                         final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
     # remaining that has not been written to disk
     if len(final_dict) is not 0:
-        print('last block')
+        print('last block to write')
         print(block_write)
         if len(str(block_write)) is 1:
             print('if')
