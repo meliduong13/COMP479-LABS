@@ -326,13 +326,37 @@ def add_to_block(key, values, my_dict):
 
 # small helper method used to write a owrd and newid to dicionary
 #  it is used to generate 44 dictionary blocks
+def add_to_positional_dict(key, value, my_dict):
+    if key not in my_dict.keys():
+        my_dict[key] = [value, 1]
+    # todo create tuple (value, freq) and do freq++
+    else:
+        if value not in my_dict[key]:
+            # if value doesn't exist in value list for given key
+            my_dict[key].append((value, 1))
+        else:
+            # if value exists already in value list, increment its frequency
+            my_dict[key][value][1] += 1
+    # todo set freq to 1 for tuple (value,freq)
+    return my_dict
+
+
+# for term, list_of_ids in dict.items():
+#         for each in list_of_ids:
+#             if each[0] is 1:
+#                 each[1] += 1
+
+# small helper method used to write a owrd and newid to dicionary
+#  it is used to generate 44 dictionary blocks
 def add_to_dict(key, value, my_dict):
     if key not in my_dict.keys():
         my_dict[key] = [value]
+    # todo create tuple (value, freq) and do freq++
     else:
         if value not in my_dict[key]:
             # if value doesn't exist in value list for given key
             my_dict[key].append(value)
+    # todo set freq to 1 for tuple (value,freq)
     return my_dict
 
 
@@ -354,11 +378,15 @@ def tokenize_all(reuters_files, output_dir):
     block_write = 0
     total_terms = 0
     ps = PorterStemmer()
-    dict_terms = {}
-
+    terms_dict = {}
+    # todo create a dict containing key=docID, value=doc length
+    doc_length_dict = {}
+    doc_length_avg = 0
     print('starting to write a dictionary every 500 reuters articles...')
     for file in reuters_files:
         with open('./files/' + file) as fp:
+            doc_length = 0
+            doc_length_avg = 0
             soup = BeautifulSoup(fp, 'html.parser')
             text = soup.get_text()
             text = ''.join(each for each in text if not each.isdigit())
@@ -373,12 +401,17 @@ def tokenize_all(reuters_files, output_dir):
 
             # each word becomes a token in a dictionary. Every 500 terms, write those to disk
             for word in text:
+                doc_length += 1
                 # put all terms in a separate dictionary in order to delimitate the first word in the 25k words per
                 # block
-                dict_terms = add_to_dict(key=word, value=None, my_dict=dict_terms)
+                terms_dict = add_to_dict(key=word, value=None, my_dict=terms_dict)
                 # this word signals the end of an article
                 if word is "\x03":
+                    doc_length += 1
                     newid += 1
+                    doc_length_dict = add_to_dict(key=newid, value=doc_length, my_dict=doc_length_dict)
+                    doc_length_avg += doc_length
+                    doc_length = 0
                     wrote_to_disk = False
                 # if writing to new block, write all previously added items to dictionary
                 if newid % 500 is 1 and newid is not 1 and not wrote_to_disk:
@@ -421,10 +454,9 @@ def tokenize_all(reuters_files, output_dir):
         disk_write.close()
     print('total number of terms ' + str(total_terms))
     terms_ordered = []
-    for i in sorted(dict_terms.keys()):
+    for i in sorted(terms_dict.keys()):
         terms_ordered.append(i)
-    # for each in terms_list:
-    #     print(each)
+
     print(len(terms_ordered))
     print('first block value' + terms_ordered[0])
     print('first block value' + terms_ordered[24999])
@@ -434,3 +466,6 @@ def tokenize_all(reuters_files, output_dir):
         disk_write.write(each)
         disk_write.write('\n')
     disk_write.close()
+
+    doc_length_avg = doc_length_avg / len(doc_length_dict)
+    print('doc length average ' + str(doc_length_avg))
