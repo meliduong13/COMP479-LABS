@@ -1,8 +1,8 @@
+import contextlib
 import json
 import re
 
 import jsbeautifier
-import contextlib
 
 opts = jsbeautifier.default_options()
 from bs4 import BeautifulSoup
@@ -12,7 +12,6 @@ import nltk
 nltk.download('punkt')
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-from nltk.tokenize import sent_tokenize, word_tokenize
 
 nltk.download("stopwords")
 opts.indent_size = 0
@@ -100,6 +99,78 @@ def search_final_dict(query, files, files_dir, query_type):
             'All results are in order of frequency. Articles at the beginning of the list contain the most keywords. '
             'Articles at the end of the list contain the least.')
         print(all_keys)
+
+
+def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_dir):
+    dict_filename_prefix = 'final'
+    dict_block_number = 0
+    read_limit = 0
+    dict_1 = {}
+    dict_2 = {}
+    dict_3 = {}
+    with contextlib.ExitStack() as stack:
+        fp_list = [stack.enter_context(open(input_dir + fname)) for fname in blocks_produced_from_tokenization]
+        done_reading = 0
+        print(len(fp_list))
+        keep_looping = True
+        dict_block = {}
+        while keep_looping:
+            for fp in fp_list:
+                line_read = fp.readline()
+
+                term = re.findall(r'"(.*?)"', line_read)
+                values_list = re.findall(r'": \[(.*?)\]', line_read)
+
+                if term is not None and len(term) is not 0:
+                    term = term[0]
+                if values_list is not None and len(values_list) is not 0:
+                    values_list = values_list[0].replace(" ", "")
+                    values_list = values_list.split(',')
+                    try:
+                        # values is a list
+                        values_list = list(map(int, values_list))
+                    except:
+                        print('error:' + values_list)
+                    if term < 'bra':
+                        dict_1 = add_to_block(key=term, values=values_list, my_dict=dict_1)
+                    elif 'bra' <= term < 'mont.':
+                        dict_2 = add_to_block(key=term, values=values_list, my_dict=dict_2)
+                    else:
+                        dict_3 = add_to_block(key=term, values=values_list, my_dict=dict_3)
+
+                # if the term added
+                # remove the 25000 limit, make 3 conditions for 3 block starts
+                # verify that dict 1 has reached 25000, dict 2 has
+                # if read_limit % 25000 == 0 and read_limit is not 0:
+                #     print('number of terms processed so far: ' + str(read_limit))
+                #     dict_block_number += 1
+                #     disk_write = open(
+                #         output_dir + str(dict_filename_prefix) + str(
+                #             dict_block_number) + ".txt", "w+")
+                #     disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
+                #     disk_write.close()
+                #     dict_block = {}
+                if line_read is "}":
+                    done_reading += 1
+                    if done_reading is len(fp_list):
+                        keep_looping = False
+
+        # if len(dict_block) is not 0:
+        #     print('remaining terms processed in last block')
+        #     dict_block_number += 1
+        disk_write_1 = open(
+            output_dir + str(dict_filename_prefix) + str('_____1') + ".txt", "w+")
+        disk_write_2 = open(
+            output_dir + str(dict_filename_prefix) + str('_____2') + ".txt", "w+")
+        disk_write_3 = open(
+            output_dir + str(dict_filename_prefix) + str('_____3') + ".txt", "w+")
+
+        disk_write_1.write(jsbeautifier.beautify(json.dumps(dict_1, sort_keys=True)))
+        disk_write_2.write(jsbeautifier.beautify(json.dumps(dict_2, sort_keys=True)))
+        disk_write_3.write(jsbeautifier.beautify(json.dumps(dict_3, sort_keys=True)))
+        disk_write_1.close()
+        disk_write_2.close()
+        disk_write_3.close()
 
 
 # this method reads from the 44 blocks of dictionary that were first produced
@@ -212,18 +283,45 @@ def merge_blocks(files, dir):
 # if the word doesn't exist in the dictionary, return true
 def add_to_dict_array(key, values, my_dict):
     is_new_term = True
-    if key not in my_dict.keys():
-        my_dict[key] = values
-        is_new_term = True
+    try:
+        if key not in my_dict.keys():
+            my_dict[key] = values
+            is_new_term = True
 
-    else:
-        if values not in my_dict[key]:
-            # if value doesn't exist in value list for given key
-            my_dict[key] += values
-            my_dict[key].sort()
-        if key in my_dict.keys():
-            is_new_term = False
+        else:
+            if values not in my_dict[key]:
+                # if value doesn't exist in value list for given key
+                my_dict[key] += values
+                my_dict[key].sort()
+            if key in my_dict.keys():
+                is_new_term = False
+    except Exception as e:
+        print('error')
+        print(e)
+        print('key')
+        print(key)
+        print('value')
+        print(values)
     return my_dict, is_new_term
+
+
+def add_to_block(key, values, my_dict):
+    try:
+        if key not in my_dict.keys():
+            my_dict[key] = values
+        else:
+            if values not in my_dict[key]:
+                # if value doesn't exist in value list for given key
+                my_dict[key] += values
+                my_dict[key].sort()
+    except Exception as e:
+        print('error')
+        print(e)
+        print('key')
+        print(key)
+        print('value')
+        print(values)
+    return my_dict
 
 
 # small helper method used to write a owrd and newid to dicionary
@@ -236,6 +334,7 @@ def add_to_dict(key, value, my_dict):
             # if value doesn't exist in value list for given key
             my_dict[key].append(value)
     return my_dict
+
 
 # first step in the SPIMI algorithm
 # the reuters files are tokenized and written to 44 different dictionaries, where every dictionary is written to a file
@@ -255,6 +354,7 @@ def tokenize_all(reuters_files, output_dir):
     block_write = 0
     total_terms = 0
     ps = PorterStemmer()
+    dict_terms = {}
 
     print('starting to write a dictionary every 500 reuters articles...')
     for file in reuters_files:
@@ -273,7 +373,10 @@ def tokenize_all(reuters_files, output_dir):
 
             # each word becomes a token in a dictionary. Every 500 terms, write those to disk
             for word in text:
-                # this words signals the end of an article
+                # put all terms in a separate dictionary in order to delimitate the first word in the 25k words per
+                # block
+                dict_terms = add_to_dict(key=word, value=None, my_dict=dict_terms)
+                # this word signals the end of an article
                 if word is "\x03":
                     newid += 1
                     wrote_to_disk = False
@@ -317,3 +420,17 @@ def tokenize_all(reuters_files, output_dir):
         disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
         disk_write.close()
     print('total number of terms ' + str(total_terms))
+    terms_ordered = []
+    for i in sorted(dict_terms.keys()):
+        terms_ordered.append(i)
+    # for each in terms_list:
+    #     print(each)
+    print(len(terms_ordered))
+    print('first block value' + terms_ordered[0])
+    print('first block value' + terms_ordered[24999])
+    print('first block value' + terms_ordered[49999])
+    disk_write = open("test.txt", "w+")
+    for each in terms_ordered:
+        disk_write.write(each)
+        disk_write.write('\n')
+    disk_write.close()

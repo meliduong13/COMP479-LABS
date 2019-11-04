@@ -4,6 +4,7 @@ from os.path import isfile, join
 from spimi import *
 
 files = [f for f in listdir('./files') if isfile(join('./files', f))]
+files2 = [f for f in listdir('./files2') if isfile(join('./files2', f))]
 disk_files = [f for f in listdir('./DISK') if isfile(join('./DISK', f))]
 
 
@@ -18,7 +19,8 @@ def spimi(reuters_files, block_files, block_files_dir, output_dir_final_dict):
 # blocks in the directory 'DISK_FINAL'
 
 # spimi(files, disk_files, './DISK/', './DISK_FINAL/')
-
+# tokenize_all(files, './DISK/')
+# read_files_and_write(blocks_produced_from_tokenization=disk_files, input_dir='./DISK/', output_dir='./DISK_FINAL/')
 
 # the following test queries are ran on the final dictionary distributed over 4 blocks in the directory 'DISK_FINAL"
 final_dict_files = [f for f in listdir('./DISK_FINAL') if isfile(join('./DISK_FINAL', f))]
