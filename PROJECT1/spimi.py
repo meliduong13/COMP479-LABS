@@ -120,6 +120,7 @@ def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_di
 
                 term = re.findall(r'"(.*?)"', line_read)
                 values_list = re.findall(r'": \[(.*?)\]', line_read)
+                # todo for each line append list of values to []
 
                 if term is not None and len(term) is not 0:
                     term = term[0]
@@ -132,11 +133,11 @@ def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_di
                     except:
                         print('error:' + values_list)
                     if term < 'bra':
-                        dict_1 = add_to_block(key=term, values=values_list, my_dict=dict_1)
+                        dict_1 = add_to_positional_dict(term=term, doc_id=values_list, my_dict=dict_1)
                     elif 'bra' <= term < 'mont.':
-                        dict_2 = add_to_block(key=term, values=values_list, my_dict=dict_2)
+                        dict_2 = add_to_positional_dict(term=term, doc_id=values_list, my_dict=dict_2)
                     else:
-                        dict_3 = add_to_block(key=term, values=values_list, my_dict=dict_3)
+                        dict_3 = add_to_positional_dict(term=term, doc_id=values_list, my_dict=dict_3)
 
                 # if the term added
                 # remove the 25000 limit, make 3 conditions for 3 block starts
@@ -324,41 +325,35 @@ def add_to_block(key, values, my_dict):
     return my_dict
 
 
-# small helper method used to write a owrd and newid to dicionary
+# small helper method used to write a word and newid to dicionary
 #  it is used to generate 44 dictionary blocks
-def add_to_positional_dict(key, value, my_dict):
-    if key not in my_dict.keys():
-        my_dict[key] = [value, 1]
-    # todo create tuple (value, freq) and do freq++
+# key is the word
+# value is doc_id
+def add_to_positional_dict(term, doc_id, my_dict):
+    found_doc_id = False
+    if term not in my_dict.keys():
+        my_dict[term] = [[doc_id, 1]]
     else:
-        if value not in my_dict[key]:
-            # if value doesn't exist in value list for given key
-            my_dict[key].append((value, 1))
-        else:
-            # if value exists already in value list, increment its frequency
-            my_dict[key][value][1] += 1
-    # todo set freq to 1 for tuple (value,freq)
+        # if doc_id exists already in value list, increment its frequency
+        for id_freq in my_dict[term]:
+            if id_freq[0] is doc_id:
+                id_freq[1] += 1
+                found_doc_id = True
+        #  if doc_id doesn't exist for given term, append it to the existing list with frequency 1
+        if found_doc_id is False:
+            my_dict[term].append([doc_id, 1])
     return my_dict
-
-
-# for term, list_of_ids in dict.items():
-#         for each in list_of_ids:
-#             if each[0] is 1:
-#                 each[1] += 1
 
 # small helper method used to write a owrd and newid to dicionary
 #  it is used to generate 44 dictionary blocks
 def add_to_dict(key, value, my_dict):
     if key not in my_dict.keys():
         my_dict[key] = [value]
-    # todo create tuple (value, freq) and do freq++
     else:
         if value not in my_dict[key]:
             # if value doesn't exist in value list for given key
             my_dict[key].append(value)
-    # todo set freq to 1 for tuple (value,freq)
     return my_dict
-
 
 # first step in the SPIMI algorithm
 # the reuters files are tokenized and written to 44 different dictionaries, where every dictionary is written to a file
@@ -386,7 +381,6 @@ def tokenize_all(reuters_files, output_dir):
     for file in reuters_files:
         with open('./files/' + file) as fp:
             doc_length = 0
-            doc_length_avg = 0
             soup = BeautifulSoup(fp, 'html.parser')
             text = soup.get_text()
             text = ''.join(each for each in text if not each.isdigit())
@@ -404,12 +398,14 @@ def tokenize_all(reuters_files, output_dir):
                 doc_length += 1
                 # put all terms in a separate dictionary in order to delimitate the first word in the 25k words per
                 # block
-                terms_dict = add_to_dict(key=word, value=None, my_dict=terms_dict)
+                terms_dict = add_to_positional_dict(term=word, doc_id=None, my_dict=terms_dict)
                 # this word signals the end of an article
                 if word is "\x03":
                     doc_length += 1
                     newid += 1
-                    doc_length_dict = add_to_dict(key=newid, value=doc_length, my_dict=doc_length_dict)
+                    doc_length_dict[newid - 1] = doc_length
+                    # when reaching the end of a document, increment the document's length, which will be divided at
+                    # the end to give the doc length average
                     doc_length_avg += doc_length
                     doc_length = 0
                     wrote_to_disk = False
@@ -425,9 +421,9 @@ def tokenize_all(reuters_files, output_dir):
                         disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
                     if word is "\x03":
                         print('reached article ' + str(newid))
-                        final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict)
                     else:
-                        final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
+                        final_dict = add_to_positional_dict(term=word, doc_id=newid, my_dict=final_dict)
                     disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
                     disk_write.close()
 
@@ -439,9 +435,9 @@ def tokenize_all(reuters_files, output_dir):
                 # if not starting a new block, just add to dict
                 else:
                     if word is "\x03":
-                        final_dict = add_to_dict(key=word, value=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict)
                     else:
-                        final_dict = add_to_dict(key=word, value=newid, my_dict=final_dict)
+                        final_dict = add_to_positional_dict(term=word, doc_id=newid, my_dict=final_dict)
     # remaining that has not been written to disk is written to the last block
     if len(final_dict) is not 0:
         print('last block to write with remaining terms')
@@ -469,3 +465,6 @@ def tokenize_all(reuters_files, output_dir):
 
     doc_length_avg = doc_length_avg / len(doc_length_dict)
     print('doc length average ' + str(doc_length_avg))
+    disk_write = open(output_dir + "DOC_LENGTH_DICT" + ".txt", "w+")
+    disk_write.write(jsbeautifier.beautify(json.dumps(doc_length_dict, sort_keys=True)))
+    disk_write.close()
