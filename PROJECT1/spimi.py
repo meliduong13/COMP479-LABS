@@ -1,3 +1,4 @@
+import ast
 import contextlib
 import json
 import re
@@ -10,6 +11,7 @@ from bs4 import BeautifulSoup
 import nltk
 
 nltk.download('punkt')
+
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
@@ -33,10 +35,11 @@ def sort_by_values_len(my_dict):
 # then verifies whether the searched words in the query are contained in the dictionary
 # if they are, the values of the list of ids is retrieved
 def search_final_dict(query, files, files_dir, query_type):
+    user_search = query
     query_type = query_type
+    query = ''.join(each for each in query if not each.isdigit())
     top150 = stopwords.words('english')[0:150]
     keywords_dict = {}
-    user_search = query
     query = query.split()
     for each in query:
         each = each.lower()
@@ -114,64 +117,68 @@ def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_di
         print(len(fp_list))
         keep_looping = True
         dict_block = {}
+        line_num = 0
         while keep_looping:
+            line_num += 1
             for fp in fp_list:
                 line_read = fp.readline()
-
-                term = re.findall(r'"(.*?)"', line_read)
-                values_list = re.findall(r'": \[(.*?)\]', line_read)
-                # todo for each line append list of values to []
-
-                if term is not None and len(term) is not 0:
-                    term = term[0]
-                if values_list is not None and len(values_list) is not 0:
-                    values_list = values_list[0].replace(" ", "")
-                    values_list = values_list.split(',')
-                    try:
-                        # values is a list
-                        values_list = list(map(int, values_list))
-                    except:
-                        print('error:' + values_list)
-                    if term < 'bra':
-                        dict_1 = add_to_positional_dict(term=term, doc_id=values_list, my_dict=dict_1)
-                    elif 'bra' <= term < 'mont.':
-                        dict_2 = add_to_positional_dict(term=term, doc_id=values_list, my_dict=dict_2)
-                    else:
-                        dict_3 = add_to_positional_dict(term=term, doc_id=values_list, my_dict=dict_3)
-
-                # if the term added
-                # remove the 25000 limit, make 3 conditions for 3 block starts
-                # verify that dict 1 has reached 25000, dict 2 has
-                # if read_limit % 25000 == 0 and read_limit is not 0:
-                #     print('number of terms processed so far: ' + str(read_limit))
-                #     dict_block_number += 1
-                #     disk_write = open(
-                #         output_dir + str(dict_filename_prefix) + str(
-                #             dict_block_number) + ".txt", "w+")
-                #     disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
-                #     disk_write.close()
-                #     dict_block = {}
-                if line_read is "}":
+                if line_read is "":
+                    print('nothing')
+                elif 'EOF' in line_read:
                     done_reading += 1
                     if done_reading is len(fp_list):
                         keep_looping = False
+                else:
+                    term = re.findall(r'"(.*?)" :', line_read)
+                    if term is not None and len(term) is not 0:
+                        term = term[0]
+                    try:
+                        values_list = line_read[line_read.index('\" :[') + 3:]
+                        if values_list is not None and len(values_list) is not 0:
+                            values_list = ast.literal_eval(values_list)
+                            if term <= 'bra':
+                                print('bra')
+                                dict_1 = add_to_positional_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                           my_dict=dict_1)
+                            elif 'bra' < term < 'montagne':
+                                print('mont.')
+                                dict_2 = add_to_positional_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                           my_dict=dict_2)
+                            else:
+                                print('last')
+                                dict_3 = add_to_positional_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                           my_dict=dict_3)
+                    except Exception as e:
+                        print(e)
 
-        # if len(dict_block) is not 0:
-        #     print('remaining terms processed in last block')
-        #     dict_block_number += 1
-        disk_write_1 = open(
-            output_dir + str(dict_filename_prefix) + str('_____1') + ".txt", "w+")
-        disk_write_2 = open(
-            output_dir + str(dict_filename_prefix) + str('_____2') + ".txt", "w+")
-        disk_write_3 = open(
-            output_dir + str(dict_filename_prefix) + str('_____3') + ".txt", "w+")
+                        print('content: ' + line_read)
+                        print(line_read)
+                        print(fp)
+                        print(term)
+                        print(line_read)
+                        quit()
 
-        disk_write_1.write(jsbeautifier.beautify(json.dumps(dict_1, sort_keys=True)))
-        disk_write_2.write(jsbeautifier.beautify(json.dumps(dict_2, sort_keys=True)))
-        disk_write_3.write(jsbeautifier.beautify(json.dumps(dict_3, sort_keys=True)))
-        disk_write_1.close()
-        disk_write_2.close()
-        disk_write_3.close()
+    print(len(dict_1))
+    print(len(dict_2))
+    print(len(dict_3))
+
+    with open(output_dir + dict_filename_prefix + str('_1') + ".txt", 'w+') as disk_write:
+        [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in
+         sorted(dict_1.items())]
+        disk_write.write('EOF')
+        disk_write.close()
+
+    with open(output_dir + dict_filename_prefix + str('_2') + ".txt", 'w+') as disk_write:
+        [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in
+         sorted(dict_2.items())]
+        disk_write.write('EOF')
+        disk_write.close()
+
+    with open(output_dir + dict_filename_prefix + str('_3') + ".txt", 'w+') as disk_write:
+        [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in
+         sorted(dict_3.items())]
+        disk_write.write('EOF')
+        disk_write.close()
 
 
 # this method reads from the 44 blocks of dictionary that were first produced
@@ -195,7 +202,7 @@ def read_all_files_at_once_and_make_final_dict(blocks_produced_from_tokenization
             for fp in fp_list:
                 line_read = fp.readline()
 
-                term = re.findall(r'"(.*?)"', line_read)
+                term = re.findall(r'"(.*?)":', line_read)
                 values = re.findall(r'": \[(.*?)\]', line_read)
 
                 if term is not None and len(term) is not 0:
@@ -254,7 +261,7 @@ def merge_blocks(files, dir):
                 line_counter += 1
                 line_as_string = line
                 term = re.findall(r'"(.*?)"', line_as_string)
-                values = re.findall(r'": \[(.*?)\]', line_as_string)
+                values = re.findall(r'\[(.*?)\]', line_as_string)
 
                 if term is not None and len(term) is not 0:
                     if term[0] not in dict_from_text.keys():
@@ -344,6 +351,34 @@ def add_to_positional_dict(term, doc_id, my_dict):
             my_dict[term].append([doc_id, 1])
     return my_dict
 
+
+def add_to_positional_dict_with_array(term, doc_id_freq_array, my_dict):
+    found_doc_id = False
+    for doc_id_freq_input in doc_id_freq_array:
+        try:
+            if term not in my_dict.keys():
+                my_dict[term] = [doc_id_freq_input]
+            else:
+                # if doc_id exists already in value list, increment its frequency
+                for each in my_dict[term]:
+                    # if the newly added values 'each' have the doc_id in the dictionary, increment the frequency to
+                    # that
+                    # of 'each'
+                    if each[0] is doc_id_freq_input[0]:
+                        each[1] += doc_id_freq_input[1]
+                        found_doc_id = True
+                #  if doc_id doesn't exist for given term, append it to the existing list with frequency 1
+                if found_doc_id is False:
+                    my_dict[term].append(doc_id_freq_input)
+
+        except TypeError as e:
+            print(e)
+            print(term)
+            print(doc_id_freq_input)
+    print('added term:' + term)
+    return my_dict
+
+
 # small helper method used to write a owrd and newid to dicionary
 #  it is used to generate 44 dictionary blocks
 def add_to_dict(key, value, my_dict):
@@ -354,6 +389,7 @@ def add_to_dict(key, value, my_dict):
             # if value doesn't exist in value list for given key
             my_dict[key].append(value)
     return my_dict
+
 
 # first step in the SPIMI algorithm
 # the reuters files are tokenized and written to 44 different dictionaries, where every dictionary is written to a file
@@ -401,7 +437,7 @@ def tokenize_all(reuters_files, output_dir):
                 terms_dict = add_to_positional_dict(term=word, doc_id=None, my_dict=terms_dict)
                 # this word signals the end of an article
                 if word is "\x03":
-                    doc_length += 1
+                    # doc_length += 1
                     newid += 1
                     doc_length_dict[newid - 1] = doc_length
                     # when reaching the end of a document, increment the document's length, which will be divided at
@@ -414,18 +450,21 @@ def tokenize_all(reuters_files, output_dir):
                     print('reached article ' + str(newid))
                     wrote_to_disk = True
 
-                    if len(str(block_write)) is 1:
-                        disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
-                    else:
-                        # print('else')
-                        disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
                     if word is "\x03":
                         print('reached article ' + str(newid))
                         final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict)
                     else:
                         final_dict = add_to_positional_dict(term=word, doc_id=newid, my_dict=final_dict)
-                    disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
-                    disk_write.close()
+
+                    if len(str(block_write)) is 1:
+                        block_prefix = "BLOCK0"
+                    else:
+                        block_prefix = "BLOCK"
+
+                    with open(output_dir + block_prefix + str(block_write) + ".txt", 'w+') as disk_write:
+                        [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in
+                         sorted(final_dict.items())]
+                        disk_write.write('EOF')
 
                     # increment block number
                     block_write += 1
@@ -435,7 +474,7 @@ def tokenize_all(reuters_files, output_dir):
                 # if not starting a new block, just add to dict
                 else:
                     if word is "\x03":
-                        final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict, )
                     else:
                         final_dict = add_to_positional_dict(term=word, doc_id=newid, my_dict=final_dict)
     # remaining that has not been written to disk is written to the last block
@@ -443,10 +482,13 @@ def tokenize_all(reuters_files, output_dir):
         print('last block to write with remaining terms')
         print(block_write)
         if len(str(block_write)) is 1:
-            disk_write = open(output_dir + "BLOCK0" + str(block_write) + ".txt", "w+")
+            block_prefix = "BLOCK0"
         else:
-            disk_write = open(output_dir + "BLOCK" + str(block_write) + ".txt", "w+")
-        disk_write.write(jsbeautifier.beautify(json.dumps(final_dict, sort_keys=True)))
+            block_prefix = "BLOCK"
+
+        with open(output_dir + block_prefix + str(block_write) + ".txt", 'w+') as disk_write:
+            [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in sorted(final_dict.items())]
+            disk_write.write('EOF')
         disk_write.close()
     print('total number of terms ' + str(total_terms))
     terms_ordered = []
@@ -455,8 +497,8 @@ def tokenize_all(reuters_files, output_dir):
 
     print(len(terms_ordered))
     print('first block value' + terms_ordered[0])
-    print('first block value' + terms_ordered[24999])
-    print('first block value' + terms_ordered[49999])
+    print('first block value' + terms_ordered[25000])
+    print('first block value' + terms_ordered[50000])
     disk_write = open("test.txt", "w+")
     for each in terms_ordered:
         disk_write.write(each)
