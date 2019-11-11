@@ -4,6 +4,7 @@ import json
 import re
 
 import jsbeautifier
+import math
 
 opts = jsbeautifier.default_options()
 from bs4 import BeautifulSoup
@@ -29,6 +30,13 @@ def sort_by_values_len(my_dict):
     return sorted_dict
 
 
+def make_list_from_dict_values(dict_values_list):
+    new_list = []
+    for each in dict_values_list:
+        new_list.append(each[0])
+    return new_list
+
+
 # the final dictionary spreads over 4 files in the directory 'DISK_FINAL'
 # this method searches from those files for an 'AND' or 'OR' query
 # to do that it reads each file, line by line, retrieves the key and values per line
@@ -41,67 +49,124 @@ def search_final_dict(query, files, files_dir, query_type):
     top150 = stopwords.words('english')[0:150]
     keywords_dict = {}
     query = query.split()
+    # prepare the dictionary keys based on the query
     for each in query:
         each = each.lower()
         if each not in top150:
             keywords_dict[each] = []
-    for file in files:
+
+        # open the appropriate file depending on the word
+        if each <= 'bra':
+            file = 'final_1.txt'
+        elif 'bra' < each < 'montagne':
+            file = 'final_2.txt'
+        else:
+            file = 'final_3.txt'
+
         with open(files_dir + file) as fp:
             for line in fp:
-                term = re.findall(r'"(.*?)"', line)
-                values = re.findall(r'": \[(.*?)\]', line)
+
+                term = re.findall(r'"(.*?)" :', line)
                 # if the term exists
                 if term is not None and len(term) is not 0:
                     term = term[0]
                     # if the keyword is equal to the dictionary term
                     if term in keywords_dict.keys():
                         # get values and add to the keywords dict
-                        if values is not None and len(values) is not 0:
-                            values = values[0].replace(" ", "")
-                            values = values.split(',')
-                            try:
-                                values = list(map(int, values))
-                                keywords_dict[term] += values
-                                keywords_dict[term].sort()
-                            except:
-                                print('error:' + values)
+                        try:
+                            values_list = line[line.index('\" :[') + 3:]
+                            if values_list is not None and len(values_list) is not 0:
+                                values_list = ast.literal_eval(values_list)
+                                keywords_dict[term] = values_list
+                                print(values_list)
+                                break
+                        except:
+                            print('error:' + values_list)
+
     if len(keywords_dict) is 1:
         print('\nResults for the single word query ' + "\"" + user_search + "\"")
         print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
     elif query_type is 'and':
-        # print('\n*****************Dictionary content **********************')
-        # print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
-        # print('\n*****************Dictionary content**********************')
         print('\nResults for the "and" query ' + "\"" + user_search + "\"")
-        print(sorted(set.intersection(*map(set, (keywords_dict.values())))))
+        print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        doc_ids = []
+        for each in keywords_dict.values():
+            doc_ids.append(make_list_from_dict_values(each))
+        doc_ids = sorted(set.intersection(*map(set, doc_ids)))
+        print(doc_ids)
+        calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
     elif query_type is 'or':
-        # print('\n*****************Dictionary content**********************')
-        # print(jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
-        # print('\n*****************Dictionary result**********************')
         print('\nResults with keywords contained in each article for the "or" query ' + "\"" + user_search + "\"")
-        list_of_or_query = sorted(set.union(*map(set, (keywords_dict.values()))))
+        print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        doc_ids = []
+        for each in keywords_dict.values():
+            doc_ids.append(make_list_from_dict_values(each))
+        doc_ids = sorte(set.union())
 
-        dict_or_query = {}
-        for each_id in list_of_or_query:
-            for word, doc_id_list in keywords_dict.items():
-                if each_id in doc_id_list:
-                    if each_id not in dict_or_query:
-                        dict_or_query[each_id] = [word]
-                    else:
-                        dict_or_query[each_id] += [word]
-        sorted_by_frequency_of_keys = sort_by_values_len(dict_or_query)
-        # print(jsbeautifier.beautify(json.dumps(sort_by_values_len(dict_or_query), sort_keys=True)))
-        for each in sorted_by_frequency_of_keys:
-            print(each)
+        # for each in
+        # list_of_or_query = sorted(set.union(*map(set, (keywords_dict.values()))))
+        #
+        # dict_or_query = {}
+        # for each_id in list_of_or_query:
+        #     for word, doc_id_list in keywords_dict.items():
+        #         if each_id in doc_id_list:
+        #             if each_id not in dict_or_query:
+        #                 dict_or_query[each_id] = [word]
+        #             else:
+        #                 dict_or_query[each_id] += [word]
+        # sorted_by_frequency_of_keys = sort_by_values_len(dict_or_query)
+        # # print(jsbeautifier.beautify(json.dumps(sort_by_values_len(dict_or_query), sort_keys=True)))
+        # for each in sorted_by_frequency_of_keys:
+        #     print(each)
+        #
+        # all_keys = []
+        # for each in sorted_by_frequency_of_keys:
+        #     all_keys += each.keys()
+        # print('\nResults in a list format for the "or" query ' + "\"" + user_search + "\"")
+        # print(
+        #     'All results are in order of frequency. Articles at the beginning of the list contain the most keywords. '
+        #     'Articles at the end of the list contain the least.')
+        # print(all_keys)
 
-        all_keys = []
-        for each in sorted_by_frequency_of_keys:
-            all_keys += each.keys()
-        print('\nResults in a list format for the "or" query ' + "\"" + user_search + "\"")
-        print(
-            'All results are in order of frequency. Articles at the beginning of the list contain the most keywords. '
-            'Articles at the end of the list contain the least.')
-        print(all_keys)
+
+def calculate_doc_score(doc_id_list, dictionary, k1, b):
+    num_docs = 21578
+    l_avg = 118
+    k1 = k1
+    b = b
+    score_dict = {}
+    for doc_id in doc_id_list:
+        for word in dictionary.keys():
+            doc_freq_of_term = len(dictionary[word])
+            for word_and_freq in dictionary[word]:
+                if word_and_freq[0] == doc_id:
+                    print('*********')
+                    print('calculating the score for doc ' + str(doc_id))
+                    term_freq_in_doc = word_and_freq[1]
+                    # getting the doc length for given word
+                    with open('DOC_LENGTH_DICT.txt') as fp:
+                        print('opened doc')
+                        try:
+                            for i, line in enumerate(fp):
+                                if i == doc_id + 1:
+                                    print('found line')
+                                    doc_len = line[line.index('\": ') + 3:]
+                                    doc_len = doc_len.replace(",", "")
+                                    doc_len = doc_len.replace(" ", "")
+                                    doc_len = doc_len.replace("\\n", "")
+                                    doc_len = int(doc_len)
+                                    score = math.log10(num_docs / doc_freq_of_term) * ((k1 + 1) * term_freq_in_doc) / (
+                                            k1 * (1 - b) + b * (doc_len / l_avg) + term_freq_in_doc)
+                                    if doc_id not in score_dict.keys():
+                                        score_dict[doc_id] = score
+                                    else:
+                                        score_dict[doc_id] += score
+
+                                    print('score for doc ' + str(doc_id) + ' for word ' + word)
+                        except ValueError:
+                            print('cannot convert value to int')
+    print(jsbeautifier.beautify(json.dumps(score_dict, sort_keys=True)))
+    return score_dict
 
 
 def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_dir):
@@ -507,6 +572,6 @@ def tokenize_all(reuters_files, output_dir):
 
     doc_length_avg = doc_length_avg / len(doc_length_dict)
     print('doc length average ' + str(doc_length_avg))
-    disk_write = open(output_dir + "DOC_LENGTH_DICT" + ".txt", "w+")
+    disk_write = open("DOC_LENGTH_DICT" + ".txt", "w+")
     disk_write.write(jsbeautifier.beautify(json.dumps(doc_length_dict, sort_keys=True)))
     disk_write.close()
