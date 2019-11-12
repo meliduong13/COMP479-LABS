@@ -42,91 +42,67 @@ def make_list_from_dict_values(dict_values_list):
 # to do that it reads each file, line by line, retrieves the key and values per line
 # then verifies whether the searched words in the query are contained in the dictionary
 # if they are, the values of the list of ids is retrieved
-def search_final_dict(query, files, files_dir, query_type):
+def search_final_dict(query, files_dir):
     user_search = query
-    query_type = query_type
+    query_type = "and"
     query = ''.join(each for each in query if not each.isdigit())
     top150 = stopwords.words('english')[0:150]
     keywords_dict = {}
     query = query.split()
     # prepare the dictionary keys based on the query
     for each in query:
-        each = each.lower()
-        if each not in top150:
-            keywords_dict[each] = []
+        each_lower = each.lower()
+        if each_lower not in top150:
+            keywords_dict[each_lower] = []
+            # open the appropriate file depending on the word
+            if each_lower <= 'bra':
+                file = 'final_1.txt'
+            elif 'bra' < each_lower < 'montagne':
+                file = 'final_2.txt'
+            else:
+                file = 'final_3.txt'
 
-        # open the appropriate file depending on the word
-        if each <= 'bra':
-            file = 'final_1.txt'
-        elif 'bra' < each < 'montagne':
-            file = 'final_2.txt'
-        else:
-            file = 'final_3.txt'
-
-        with open(files_dir + file) as fp:
-            for line in fp:
-
-                term = re.findall(r'"(.*?)" :', line)
-                # if the term exists
-                if term is not None and len(term) is not 0:
-                    term = term[0]
-                    # if the keyword is equal to the dictionary term
-                    if term in keywords_dict.keys():
-                        # get values and add to the keywords dict
-                        try:
-                            values_list = line[line.index('\" :[') + 3:]
-                            if values_list is not None and len(values_list) is not 0:
-                                values_list = ast.literal_eval(values_list)
-                                keywords_dict[term] = values_list
-                                print(values_list)
-                                break
-                        except:
-                            print('error:' + values_list)
+            with open(files_dir + file) as fp:
+                for line in fp:
+                    term = re.findall(r'"(.*?)" :', line)
+                    # if the term exists
+                    if term is not None and len(term) is not 0:
+                        term = term[0]
+                        # if the keyword is equal to the dictionary term
+                        if term in keywords_dict.keys():
+                            if term == each_lower:
+                                # get values and add to the keywords dict
+                                try:
+                                    values_list = line[line.index('\" :[') + 3:]
+                                    if values_list is not None and len(values_list) is not 0:
+                                        values_list = ast.literal_eval(values_list)
+                                        keywords_dict[term] = values_list
+                                        # print(values_list)
+                                        break
+                                except:
+                                    print('error:' + values_list)
 
     if len(keywords_dict) is 1:
         print('\nResults for the single word query ' + "\"" + user_search + "\"")
-        print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        doc_ids = []
+        for each in keywords_dict.values():
+            doc_ids += make_list_from_dict_values(each)
+        calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
+
     elif query_type is 'and':
-        print('\nResults for the "and" query ' + "\"" + user_search + "\"")
-        print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
+        print('\nResults for the query ' + "\"" + user_search + "\"")
         doc_ids = []
         for each in keywords_dict.values():
             doc_ids.append(make_list_from_dict_values(each))
         doc_ids = sorted(set.intersection(*map(set, doc_ids)))
-        print(doc_ids)
-        calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
-    elif query_type is 'or':
-        print('\nResults with keywords contained in each article for the "or" query ' + "\"" + user_search + "\"")
-        print('\n' + jsbeautifier.beautify(json.dumps(keywords_dict, sort_keys=True)))
-        doc_ids = []
-        for each in keywords_dict.values():
-            doc_ids.append(make_list_from_dict_values(each))
-        doc_ids = sorte(set.union())
-
-        # for each in
-        # list_of_or_query = sorted(set.union(*map(set, (keywords_dict.values()))))
-        #
-        # dict_or_query = {}
-        # for each_id in list_of_or_query:
-        #     for word, doc_id_list in keywords_dict.items():
-        #         if each_id in doc_id_list:
-        #             if each_id not in dict_or_query:
-        #                 dict_or_query[each_id] = [word]
-        #             else:
-        #                 dict_or_query[each_id] += [word]
-        # sorted_by_frequency_of_keys = sort_by_values_len(dict_or_query)
-        # # print(jsbeautifier.beautify(json.dumps(sort_by_values_len(dict_or_query), sort_keys=True)))
-        # for each in sorted_by_frequency_of_keys:
-        #     print(each)
-        #
-        # all_keys = []
-        # for each in sorted_by_frequency_of_keys:
-        #     all_keys += each.keys()
-        # print('\nResults in a list format for the "or" query ' + "\"" + user_search + "\"")
-        # print(
-        #     'All results are in order of frequency. Articles at the beginning of the list contain the most keywords. '
-        #     'Articles at the end of the list contain the least.')
-        # print(all_keys)
+        if len(doc_ids) is not 0:
+            calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
+        else:
+            print('No result containing all keywords ' + "\"" + user_search + "\"")
+            for each in keywords_dict.values():
+                doc_ids.append(make_list_from_dict_values(each))
+            doc_ids = sorted(set.union(*map(set, doc_ids)))
+            calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
 
 
 def calculate_doc_score(doc_id_list, dictionary, k1, b):
@@ -140,39 +116,46 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b):
             doc_freq_of_term = len(dictionary[word])
             for word_and_freq in dictionary[word]:
                 if word_and_freq[0] == doc_id:
-                    print('*********')
-                    print('calculating the score for doc ' + str(doc_id))
                     term_freq_in_doc = word_and_freq[1]
                     # getting the doc length for given word
                     with open('DOC_LENGTH_DICT.txt') as fp:
-                        print('opened doc')
                         try:
                             for i, line in enumerate(fp):
                                 if i == doc_id + 1:
-                                    print('found line')
                                     doc_len = line[line.index('\": ') + 3:]
                                     doc_len = doc_len.replace(",", "")
                                     doc_len = doc_len.replace(" ", "")
-                                    doc_len = doc_len.replace("\\n", "")
                                     doc_len = int(doc_len)
+                                    # calculate score based on equation in book
                                     score = math.log10(num_docs / doc_freq_of_term) * ((k1 + 1) * term_freq_in_doc) / (
                                             k1 * (1 - b) + b * (doc_len / l_avg) + term_freq_in_doc)
+                                    # add to dictionary if doc_id is not there + add word
                                     if doc_id not in score_dict.keys():
-                                        score_dict[doc_id] = score
-                                    else:
-                                        score_dict[doc_id] += score
-
-                                    print('score for doc ' + str(doc_id) + ' for word ' + word)
+                                        score_dict[doc_id] = [score, [word]]
+                                    # if doc_id is in dictionary, add word if not already there
+                                    elif word not in score_dict[doc_id][1]:
+                                        score_dict[doc_id][0] += score
+                                        score_dict[doc_id][1].append(word)
                         except ValueError:
                             print('cannot convert value to int')
-    print(jsbeautifier.beautify(json.dumps(score_dict, sort_keys=True)))
+    sorted_by_keywords = sorted(score_dict, key=lambda key: score_dict[key][1])
+    list_display_order = (sorted(sorted_by_keywords, key=lambda key: score_dict[key][0], reverse=True))
+    if list_display_order is not None and len(list_display_order) is not 0:
+        print("\nListed below are the results containing the keywords\n")
+    for each_id in list_display_order:
+        for doc_id in score_dict:
+            if doc_id is each_id:
+                print("document containing keyword(s): ", end="")
+                print(score_dict[doc_id][1])
+                line_values = '{:>3}  {:>12}'.format("document score:", score_dict[doc_id][0])
+                line_doc_id = '{:>3}  {:>7}'.format("document id:", str(doc_id))
+                print(line_values)
+                print(line_doc_id + '\n')
     return score_dict
 
 
 def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_dir):
     dict_filename_prefix = 'final'
-    dict_block_number = 0
-    read_limit = 0
     dict_1 = {}
     dict_2 = {}
     dict_3 = {}
@@ -181,7 +164,6 @@ def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_di
         done_reading = 0
         print(len(fp_list))
         keep_looping = True
-        dict_block = {}
         line_num = 0
         while keep_looping:
             line_num += 1

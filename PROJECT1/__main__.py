@@ -15,6 +15,17 @@ def spimi(reuters_files, block_files, block_files_dir, output_dir_final_dict):
                                                input_dir=block_files_dir, output_dir=output_dir_final_dict)
 
 
+final_dict_files = [f for f in listdir('./DISK_FINAL') if isfile(join('./DISK_FINAL', f))]
+
+keep_searching = True
+while keep_searching:
+    try:
+        query_search = input('Enter keywords' + '\n')
+        search_final_dict(query=query_search, files_dir='./DISK_FINAL/')
+    except Exception as e:
+        print('Error with query')
+        print(e)
+
 # run the spimi method in the line below to create your dictionary. Your final dictionary will be distributed over 4
 # blocks in the directory 'DISK_FINAL'
 
@@ -23,17 +34,13 @@ def spimi(reuters_files, block_files, block_files_dir, output_dir_final_dict):
 # read_files_and_write(blocks_produced_from_tokenization=disk_files, input_dir='./DISK/', output_dir='./DISK_FINAL/')
 
 # the following test queries are ran on the final dictionary distributed over 4 blocks in the directory 'DISK_FINAL"
-final_dict_files = [f for f in listdir('./DISK_FINAL') if isfile(join('./DISK_FINAL', f))]
 
-search_final_dict(query="Jimmy Carter usa", files=final_dict_files, files_dir='./DISK_FINAL/',
-                  query_type='and')
+# search_final_dict(query="Jimmy Carter usa", files=final_dict_files, files_dir='./DISK_FINAL/',
+#                   query_type='and')
 
 # search_final_dict(query="Green Party", files=final_dict_files, files_dir='./DISK_FINAL/',
 #                   query_type='and')
-#
+# #
 # search_final_dict(query="Innovation in telecommunications", files=final_dict_files, files_dir='./DISK_FINAL/',
 #                   query_type='and')
 #
-# search_final_dict(query="environmentalist ecologist", files=final_dict_files,
-#                   files_dir='./DISK_FINAL/',
-#                   query_type='or')
