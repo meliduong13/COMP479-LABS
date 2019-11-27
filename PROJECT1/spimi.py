@@ -20,16 +20,7 @@ nltk.download("stopwords")
 opts.indent_size = 0
 
 
-# this method is used to sort dictionary items by length of their value
-# the value of the dictionary contains a list of items
-def sort_by_values_len(my_dict):
-    dict_len = {key: len(value) for key, value in my_dict.items()}
-    import operator
-    sorted_key_list = sorted(dict_len.items(), key=operator.itemgetter(1), reverse=True)
-    sorted_dict = [{item[0]: my_dict[item[0]]} for item in sorted_key_list]
-    return sorted_dict
-
-
+# helper method to make a list
 def make_list_from_dict_values(dict_values_list):
     new_list = []
     for each in dict_values_list:
@@ -37,14 +28,14 @@ def make_list_from_dict_values(dict_values_list):
     return new_list
 
 
-# the final dictionary spreads over 4 files in the directory 'DISK_FINAL'
+# the final dictionary spreads over 3 files in the directory 'DISK_FINAL'
 # this method searches from those files for an 'AND' or 'OR' query
 # to do that it reads each file, line by line, retrieves the key and values per line
-# then verifies whether the searched words in the query are contained in the dictionary
-# if they are, the values of the list of ids is retrieved
-def search_final_dict(query, files_dir):
+# then verifies whether the searched words in the query are contained in the positional dictionary
+# if they are, the values of the list of ids and frequency are retrieved
+def search_final_dict(query, files_dir, query_type):
     user_search = query
-    query_type = "and"
+    query_type = query_type
     query = ''.join(each for each in query if not each.isdigit())
     top150 = stopwords.words('english')[0:150]
     keywords_dict = {}
@@ -81,58 +72,94 @@ def search_final_dict(query, files_dir):
                                         break
                                 except:
                                     print('error:' + values_list)
-
-    if len(keywords_dict) is 1:
+    # the score for each of the results is calculated below. There are 3 cases
+    # case 1: there is only 1 query term
+    # case 2: there is more than 1 query term and it is an "and" query
+    # case 3: there is more than 1 query term and it is an "or" query
+    # for each of those cases, the apporpriate values are passed to the method calculate_doc_score
+    if len(keywords_dict) == 1:
         print('\nResults for the single word query ' + "\"" + user_search + "\"")
         doc_ids = []
         for each in keywords_dict.values():
             doc_ids += make_list_from_dict_values(each)
-        calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
+        print("\nListed below are the results containing the keywords")
+        calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5, l_avg=118.20340161275374,
+                            num_docs=21578)
 
-    elif query_type is 'and':
+    elif query_type == 'and':
         print('\nResults for the query ' + "\"" + user_search + "\"")
         doc_ids = []
         for each in keywords_dict.values():
             doc_ids.append(make_list_from_dict_values(each))
         doc_ids = sorted(set.intersection(*map(set, doc_ids)))
         if len(doc_ids) is not 0:
-            calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
+            print("\nListed below are the results containing all of the keywords")
+            calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5, l_avg=118.20340161275374,
+                                num_docs=21578)
         else:
-            print('No result containing all keywords ' + "\"" + user_search + "\"")
-            for each in keywords_dict.values():
-                doc_ids.append(make_list_from_dict_values(each))
-            doc_ids = sorted(set.union(*map(set, doc_ids)))
-            calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=2, b=0.5)
+            print("No documents found\n")
+    elif query_type == "or":
+        doc_ids = []
+        for each in keywords_dict.values():
+            doc_ids.append(make_list_from_dict_values(each))
+        doc_ids = sorted(set.union(*map(set, doc_ids)))
+        if len(doc_ids) is not 0:
+            print("\nListed below are the results containing some or all of the keywords")
+            calculate_doc_score(doc_id_list=doc_ids, dictionary=keywords_dict, k1=10, b=1, l_avg=118.20340161275374,
+                                num_docs=21578)
+        else:
+            print("No documents found\n")
 
 
-def calculate_doc_score(doc_id_list, dictionary, k1, b):
-    num_docs = 21578
-    l_avg = 118
+# method used to calculate the score of a list of documents
+# it prints out the ranked results of the documents
+# it prints out the score of the documents and the words that are contained in the document that match the word(s) in
+# the query
+# higher scored documents are listed higher than lower scored documents
+# it takes a list of document ids, a positional dictionary for all the query terms (taking into account compression)
+# the constants k1 and b
+# the document length average l_avg
+# the total number of documents num_doc
+def calculate_doc_score(doc_id_list, dictionary, k1, b, l_avg, num_docs):
+    num_docs = num_docs
+    l_avg = l_avg
     k1 = k1
     b = b
     score_dict = {}
+
+    # for each document in the list of results, calculate their score
     for doc_id in doc_id_list:
+        # for each word that is part of the query calculate their score and add it to the current document's score
         for word in dictionary.keys():
             doc_freq_of_term = len(dictionary[word])
+            # we loop through each of the [doc_id, freq] in the list for a given term
             for word_and_freq in dictionary[word]:
+                # if the 'tuple' we found  of format[doc_id, freq] matches the given doc_id, we grab the term frequency
+                # we also get the document's id
                 if word_and_freq[0] == doc_id:
                     term_freq_in_doc = word_and_freq[1]
                     # getting the doc length for given word
                     with open('DOC_LENGTH_DICT.txt') as fp:
                         try:
                             for i, line in enumerate(fp):
+                                # read document and retrieve the document length value for given document id
+                                # we know that doc_id is on line doc_id+1
                                 if i == doc_id + 1:
                                     doc_len = line[line.index('\": ') + 3:]
                                     doc_len = doc_len.replace(",", "")
                                     doc_len = doc_len.replace(" ", "")
                                     doc_len = int(doc_len)
-                                    # calculate score based on equation in book
+                                    # calculate score based on equation in book BM25
+                                    # this is the score for the current word, for the current document
                                     score = math.log10(num_docs / doc_freq_of_term) * ((k1 + 1) * term_freq_in_doc) / (
                                             k1 * (1 - b) + b * (doc_len / l_avg) + term_freq_in_doc)
-                                    # add to dictionary if doc_id is not there + add word
+                                    # add to dictionary if doc_id is not there + add word(s) associated to that score
+                                    # format of score_dict is
+                                    # doc_id -> [score, [list of terms from the query also present in the doc]]
                                     if doc_id not in score_dict.keys():
                                         score_dict[doc_id] = [score, [word]]
-                                    # if doc_id is in dictionary, add word if not already there
+                                    # if doc_id is in dictionary, add word if does not exist there
+                                    # also increment the score for that document
                                     elif word not in score_dict[doc_id][1]:
                                         score_dict[doc_id][0] += score
                                         score_dict[doc_id][1].append(word)
@@ -140,8 +167,11 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b):
                             print('cannot convert value to int')
     sorted_by_keywords = sorted(score_dict, key=lambda key: score_dict[key][1])
     list_display_order = (sorted(sorted_by_keywords, key=lambda key: score_dict[key][0], reverse=True))
-    if list_display_order is not None and len(list_display_order) is not 0:
-        print("\nListed below are the results containing the keywords\n")
+    print('List of document ids')
+    print(list_display_order)
+    print('Found ' + str(len(list_display_order)) + ' documents\n')
+    # for each doc_id in the given list, return its score, its id, and the keywords that are both in the query and
+    # the document
     for each_id in list_display_order:
         for doc_id in score_dict:
             if doc_id is each_id:
@@ -151,10 +181,13 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b):
                 line_doc_id = '{:>3}  {:>7}'.format("document id:", str(doc_id))
                 print(line_values)
                 print(line_doc_id + '\n')
+    print('*********************************************************************************')
     return score_dict
 
 
-def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_dir):
+# this method is used to write to the final dictionary
+# the final dictionary is a positional dictionary
+def read_files_and_write_final_dict(blocks_produced_from_tokenization, input_dir, output_dir):
     dict_filename_prefix = 'final'
     dict_1 = {}
     dict_2 = {}
@@ -228,69 +261,6 @@ def read_files_and_write(blocks_produced_from_tokenization, input_dir, output_di
         disk_write.close()
 
 
-# this method reads from the 44 blocks of dictionary that were first produced
-#  each dictionary block is distributed in one of the 44 files in the directory 'DISK'
-# it then opens up the 44 files, had a file parser point to each of the files
-# each of the 44 lines are read one after the other, where each line is from 1 of the 44 different files
-# after 25000 unique terms are found, a dictionary made of those 25000 terms is written into a file in the directory
-# 'DISK_FINAL'
-# that dicitonary is erased, then the next 25000 terms are read, written to a file, and so on
-def read_all_files_at_once_and_make_final_dict(blocks_produced_from_tokenization, input_dir, output_dir):
-    dict_filename_prefix = 'final'
-    dict_block_number = 0
-    read_limit = 0
-    with contextlib.ExitStack() as stack:
-        fp_list = [stack.enter_context(open(input_dir + fname)) for fname in blocks_produced_from_tokenization]
-        done_reading = 0
-        print(len(fp_list))
-        keep_looping = True
-        dict_block = {}
-        while keep_looping:
-            for fp in fp_list:
-                line_read = fp.readline()
-
-                term = re.findall(r'"(.*?)":', line_read)
-                values = re.findall(r'": \[(.*?)\]', line_read)
-
-                if term is not None and len(term) is not 0:
-                    term = term[0]
-                if values is not None and len(values) is not 0:
-                    values = values[0].replace(" ", "")
-                    values = values.split(',')
-                    try:
-                        values = list(map(int, values))
-                    except:
-                        print('error:' + values)
-                    result = add_to_dict_array(key=term, values=values, my_dict=dict_block)
-                    dict_block = result[0]
-                    is_new_term = result[1]
-                    if is_new_term is True:
-                        read_limit += 1
-                # if the term added
-                if read_limit % 25000 == 0 and read_limit is not 0:
-                    print('number of terms processed so far: ' + str(read_limit))
-                    dict_block_number += 1
-                    disk_write = open(
-                        output_dir + str(dict_filename_prefix) + str(
-                            dict_block_number) + ".txt", "w+")
-                    disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
-                    disk_write.close()
-                    dict_block = {}
-                if line_read is "}":
-                    done_reading += 1
-                    if done_reading is len(fp_list):
-                        keep_looping = False
-
-    if len(dict_block) is not 0:
-        print('remaining terms processed in last block')
-        dict_block_number += 1
-        disk_write = open(
-            output_dir + str(dict_filename_prefix) + str(
-                dict_block_number) + ".txt", "w+")
-        disk_write.write(jsbeautifier.beautify(json.dumps(dict_block, sort_keys=True)))
-        disk_write.close()
-
-
 # this method is used to generate the final dictionary into a single file
 # it reads the 44 blocks in the direcotry 'DISK', where each 500 reuters articles is written to dictionary into a
 # single file, and merges those 44 blocks into a single dictionary
@@ -360,26 +330,7 @@ def add_to_dict_array(key, values, my_dict):
     return my_dict, is_new_term
 
 
-def add_to_block(key, values, my_dict):
-    try:
-        if key not in my_dict.keys():
-            my_dict[key] = values
-        else:
-            if values not in my_dict[key]:
-                # if value doesn't exist in value list for given key
-                my_dict[key] += values
-                my_dict[key].sort()
-    except Exception as e:
-        print('error')
-        print(e)
-        print('key')
-        print(key)
-        print('value')
-        print(values)
-    return my_dict
-
-
-# small helper method used to write a word and newid to dicionary
+# small helper method used to write a word and newid to the positional dicionary
 #  it is used to generate 44 dictionary blocks
 # key is the word
 # value is doc_id
@@ -399,6 +350,7 @@ def add_to_positional_dict(term, doc_id, my_dict):
     return my_dict
 
 
+# this helper method is used to add a list of doc it and frequency to the final dictionary
 def add_to_positional_dict_with_array(term, doc_id_freq_array, my_dict):
     found_doc_id = False
     for doc_id_freq_input in doc_id_freq_array:
@@ -426,19 +378,8 @@ def add_to_positional_dict_with_array(term, doc_id_freq_array, my_dict):
     return my_dict
 
 
-# small helper method used to write a owrd and newid to dicionary
-#  it is used to generate 44 dictionary blocks
-def add_to_dict(key, value, my_dict):
-    if key not in my_dict.keys():
-        my_dict[key] = [value]
-    else:
-        if value not in my_dict[key]:
-            # if value doesn't exist in value list for given key
-            my_dict[key].append(value)
-    return my_dict
-
-
 # first step in the SPIMI algorithm
+# the dictionary is now a positional dictionary
 # the reuters files are tokenized and written to 44 different dictionaries, where every dictionary is written to a file
 # and each 500 reuters article parsed is written to a dictionary
 # the tokenization uses a combinaison lossy dictionary compression techniques
@@ -532,7 +473,7 @@ def tokenize_all(reuters_files, output_dir):
             block_prefix = "BLOCK0"
         else:
             block_prefix = "BLOCK"
-
+        # printing the positional dictionary
         with open(output_dir + block_prefix + str(block_write) + ".txt", 'w+') as disk_write:
             [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in sorted(final_dict.items())]
             disk_write.write('EOF')
@@ -542,6 +483,7 @@ def tokenize_all(reuters_files, output_dir):
     for i in sorted(terms_dict.keys()):
         terms_ordered.append(i)
 
+    # this gives back the 3 terms that start each of the blocks respectively
     print(len(terms_ordered))
     print('first block value' + terms_ordered[0])
     print('first block value' + terms_ordered[25000])
