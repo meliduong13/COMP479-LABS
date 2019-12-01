@@ -4,7 +4,8 @@ import json
 import re
 
 import jsbeautifier
-import math
+
+from helpers import *
 
 opts = jsbeautifier.default_options()
 from bs4 import BeautifulSoup
@@ -20,38 +21,28 @@ nltk.download("stopwords")
 opts.indent_size = 0
 
 
-# helper method to make a list
-def make_list_from_dict_values(dict_values_list):
-    new_list = []
-    for each in dict_values_list:
-        new_list.append(each[0])
-    return new_list
-
-
 # the final dictionary spreads over 3 files in the directory 'DISK_FINAL'
 # this method searches from those files for an 'AND' or 'OR' query
 # to do that it reads each file, line by line, retrieves the key and values per line
-# then verifies whether the searched words in the query are contained in the positional dictionary
+# then verifies whether the searched words in the query are contained in the frequency dictionary
 # if they are, the values of the list of ids and frequency are retrieved
 def search_final_dict(query, files_dir, query_type):
+    ps = PorterStemmer()
     user_search = query
     query_type = query_type
     query = ''.join(each for each in query if not each.isdigit())
+
     top150 = stopwords.words('english')[0:150]
     keywords_dict = {}
     query = query.split()
     # prepare the dictionary keys based on the query
     for each in query:
         each_lower = each.lower()
+        each_lower = ps.stem(each_lower)
         if each_lower not in top150:
             keywords_dict[each_lower] = []
             # open the appropriate file depending on the word
-            if each_lower <= 'bra':
-                file = 'final_1.txt'
-            elif 'bra' < each_lower < 'montagne':
-                file = 'final_2.txt'
-            else:
-                file = 'final_3.txt'
+            file = 'FINAL.txt'
 
             with open(files_dir + file) as fp:
                 for line in fp:
@@ -64,7 +55,7 @@ def search_final_dict(query, files_dir, query_type):
                             if term == each_lower:
                                 # get values and add to the keywords dict
                                 try:
-                                    values_list = line[line.index('\" :[') + 3:]
+                                    values_list = line[line.index('\" :') + 3:]
                                     if values_list is not None and len(values_list) is not 0:
                                         values_list = ast.literal_eval(values_list)
                                         keywords_dict[term] = values_list
@@ -116,7 +107,7 @@ def search_final_dict(query, files_dir, query_type):
 # it prints out the score of the documents and the words that are contained in the document that match the word(s) in
 # the query
 # higher scored documents are listed higher than lower scored documents
-# it takes a list of document ids, a positional dictionary for all the query terms (taking into account compression)
+# it takes a list of document ids, a frequency dictionary for all the query terms (taking into account compression)
 # the constants k1 and b
 # the document length average l_avg
 # the total number of documents num_doc
@@ -126,6 +117,10 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b, l_avg, num_docs):
     k1 = k1
     b = b
     score_dict = {}
+
+    # number of files
+    num_docs = len(open('DOC_LENGTH_DICT.txt').readlines()) - 2
+    print('length is', num_docs)
 
     # for each document in the list of results, calculate their score
     for doc_id in doc_id_list:
@@ -141,6 +136,8 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b, l_avg, num_docs):
                     # getting the doc length for given word
                     with open('DOC_LENGTH_DICT.txt') as fp:
                         try:
+                            doc_len = 0
+                            i = 1
                             for i, line in enumerate(fp):
                                 # read document and retrieve the document length value for given document id
                                 # we know that doc_id is on line doc_id+1
@@ -149,22 +146,26 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b, l_avg, num_docs):
                                     doc_len = doc_len.replace(",", "")
                                     doc_len = doc_len.replace(" ", "")
                                     doc_len = int(doc_len)
-                                    # calculate score based on equation in book BM25
-                                    # this is the score for the current word, for the current document
-                                    score = math.log10(num_docs / doc_freq_of_term) * ((k1 + 1) * term_freq_in_doc) / (
-                                            k1 * (1 - b) + b * (doc_len / l_avg) + term_freq_in_doc)
-                                    # add to dictionary if doc_id is not there + add word(s) associated to that score
-                                    # format of score_dict is
-                                    # doc_id -> [score, [list of terms from the query also present in the doc]]
-                                    if doc_id not in score_dict.keys():
-                                        score_dict[doc_id] = [score, [word]]
-                                    # if doc_id is in dictionary, add word if does not exist there
-                                    # also increment the score for that document
-                                    elif word not in score_dict[doc_id][1]:
-                                        score_dict[doc_id][0] += score
-                                        score_dict[doc_id][1].append(word)
-                        except ValueError:
-                            print('cannot convert value to int')
+                                    # # calculate score based on equation in book BM25
+                                    # # this is the score for the current word, for the current document
+                                    # score = math.log10(num_docs / doc_freq_of_term) * ((k1 + 1) * term_freq_in_doc)
+                                    # / (
+                                    #         k1 * (1 - b) + b * (doc_len / l_avg) + term_freq_in_doc)
+                                    # # add to dictionary if doc_id is not there + add word(s) associated to that score
+                                    # # format of score_dict is
+                                    # # doc_id -> [score, [list of terms from the query also present in the doc]]
+                                    # if doc_id not in score_dict.keys():
+                                    #     score_dict[doc_id] = [score, [word]]
+                                    # # if doc_id is in dictionary, add word if does not exist there
+                                    # # also increment the score for that document
+                                    # elif word not in score_dict[doc_id][1]:
+                                    #     score_dict[doc_id][0] += score
+                                    #     score_dict[doc_id][1].append(word)
+                        except ValueError as e:
+                            print('********************')
+                            print(doc_id)
+                            print(e)
+
     sorted_by_keywords = sorted(score_dict, key=lambda key: score_dict[key][1])
     list_display_order = (sorted(sorted_by_keywords, key=lambda key: score_dict[key][0], reverse=True))
     print('List of document ids')
@@ -186,7 +187,52 @@ def calculate_doc_score(doc_id_list, dictionary, k1, b, l_avg, num_docs):
 
 
 # this method is used to write to the final dictionary
-# the final dictionary is a positional dictionary
+# the final dictionary is a frequency dictionary
+def read_files_and_write_final_dict_crawler(blocks_produced_from_tokenization, input_dir, output_dir):
+    dict_filename_prefix = 'FINAL'
+    dict = {}
+    with contextlib.ExitStack() as stack:
+        fp_list = [stack.enter_context(open(input_dir + fname)) for fname in blocks_produced_from_tokenization]
+        done_reading = 0
+        print(len(fp_list))
+        keep_looping = True
+        line_num = 0
+        while keep_looping:
+            line_num += 1
+            for fp in fp_list:
+                line_read = fp.readline()
+                if line_read is "":
+                    print('nothing')
+                elif 'EOF' in line_read:
+                    done_reading += 1
+                    if done_reading is len(fp_list):
+                        keep_looping = False
+                else:
+                    term = re.findall(r'"(.*?)" :', line_read)
+                    if term is not None and len(term) is not 0:
+                        term = term[0]
+                    try:
+                        values_list = line_read[line_read.index('\" :[') + 3:]
+                        if values_list is not None and len(values_list) is not 0:
+                            values_list = ast.literal_eval(values_list)
+                            dict = add_to_frequency_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                    my_dict=dict)
+                    except Exception as e:
+                        print(e)
+
+                        print('content: ' + line_read)
+                        print(line_read)
+                        print(fp)
+                        print(term)
+                        print(line_read)
+                        quit()
+
+    print(len(dict))
+    print_dict_to_file(output_dir=output_dir, filename=dict_filename_prefix, dict_name=dict, sorted_keys=True)
+
+
+# this method is used to write to the final dictionary
+# the final dictionary is a frequency dictionary
 def read_files_and_write_final_dict(blocks_produced_from_tokenization, input_dir, output_dir):
     dict_filename_prefix = 'final'
     dict_1 = {}
@@ -218,16 +264,16 @@ def read_files_and_write_final_dict(blocks_produced_from_tokenization, input_dir
                             values_list = ast.literal_eval(values_list)
                             if term <= 'bra':
                                 print('bra')
-                                dict_1 = add_to_positional_dict_with_array(term=term, doc_id_freq_array=values_list,
-                                                                           my_dict=dict_1)
+                                dict_1 = add_to_frequency_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                          my_dict=dict_1)
                             elif 'bra' < term < 'montagne':
                                 print('mont.')
-                                dict_2 = add_to_positional_dict_with_array(term=term, doc_id_freq_array=values_list,
-                                                                           my_dict=dict_2)
+                                dict_2 = add_to_frequency_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                          my_dict=dict_2)
                             else:
                                 print('last')
-                                dict_3 = add_to_positional_dict_with_array(term=term, doc_id_freq_array=values_list,
-                                                                           my_dict=dict_3)
+                                dict_3 = add_to_frequency_dict_with_array(term=term, doc_id_freq_array=values_list,
+                                                                          my_dict=dict_3)
                     except Exception as e:
                         print(e)
 
@@ -301,85 +347,8 @@ def merge_blocks(files, dir):
     print('total length of values' + str(total))
 
 
-# small helper method to write a word and newid to dictionary
-# it returns the dictionary with newly added terms and/or newid value
-# it also returns a boolean to indicate whether the word added to dictionary already exists or not
-# if the word already exists in the dictionary, return false
-# if the word doesn't exist in the dictionary, return true
-def add_to_dict_array(key, values, my_dict):
-    is_new_term = True
-    try:
-        if key not in my_dict.keys():
-            my_dict[key] = values
-            is_new_term = True
-
-        else:
-            if values not in my_dict[key]:
-                # if value doesn't exist in value list for given key
-                my_dict[key] += values
-                my_dict[key].sort()
-            if key in my_dict.keys():
-                is_new_term = False
-    except Exception as e:
-        print('error')
-        print(e)
-        print('key')
-        print(key)
-        print('value')
-        print(values)
-    return my_dict, is_new_term
-
-
-# small helper method used to write a word and newid to the positional dicionary
-#  it is used to generate 44 dictionary blocks
-# key is the word
-# value is doc_id
-def add_to_positional_dict(term, doc_id, my_dict):
-    found_doc_id = False
-    if term not in my_dict.keys():
-        my_dict[term] = [[doc_id, 1]]
-    else:
-        # if doc_id exists already in value list, increment its frequency
-        for id_freq in my_dict[term]:
-            if id_freq[0] is doc_id:
-                id_freq[1] += 1
-                found_doc_id = True
-        #  if doc_id doesn't exist for given term, append it to the existing list with frequency 1
-        if found_doc_id is False:
-            my_dict[term].append([doc_id, 1])
-    return my_dict
-
-
-# this helper method is used to add a list of doc it and frequency to the final dictionary
-def add_to_positional_dict_with_array(term, doc_id_freq_array, my_dict):
-    found_doc_id = False
-    for doc_id_freq_input in doc_id_freq_array:
-        try:
-            if term not in my_dict.keys():
-                my_dict[term] = [doc_id_freq_input]
-            else:
-                # if doc_id exists already in value list, increment its frequency
-                for each in my_dict[term]:
-                    # if the newly added values 'each' have the doc_id in the dictionary, increment the frequency to
-                    # that
-                    # of 'each'
-                    if each[0] is doc_id_freq_input[0]:
-                        each[1] += doc_id_freq_input[1]
-                        found_doc_id = True
-                #  if doc_id doesn't exist for given term, append it to the existing list with frequency 1
-                if found_doc_id is False:
-                    my_dict[term].append(doc_id_freq_input)
-
-        except TypeError as e:
-            print(e)
-            print(term)
-            print(doc_id_freq_input)
-    print('added term:' + term)
-    return my_dict
-
-
 # first step in the SPIMI algorithm
-# the dictionary is now a positional dictionary
+# the dictionary is now a frequency dictionary
 # the reuters files are tokenized and written to 44 different dictionaries, where every dictionary is written to a file
 # and each 500 reuters article parsed is written to a dictionary
 # the tokenization uses a combinaison lossy dictionary compression techniques
@@ -401,9 +370,10 @@ def tokenize_all(reuters_files, output_dir):
     # todo create a dict containing key=docID, value=doc length
     doc_length_dict = {}
     doc_length_avg = 0
+    newid = 0
     print('starting to write a dictionary every 500 reuters articles...')
     for file in reuters_files:
-        with open('./files/' + file) as fp:
+        with open('./scrape1/' + file) as fp:
             doc_length = 0
             soup = BeautifulSoup(fp, 'html.parser')
             text = soup.get_text()
@@ -414,17 +384,22 @@ def tokenize_all(reuters_files, output_dir):
             text = [each for each in text if each not in top150]
 
             # use of porter stemmer for the table 5.1 but not for the final dictionary that was queried
-            # text = [ps.stem(each) for each in text]
+            text = [ps.stem(each) for each in text]
             total_terms += len(text)
+
+            # increment id per file 
+            newid += 1
 
             # each word becomes a token in a dictionary. Every 500 terms, write those to disk
             for word in text:
+                print(word)
                 doc_length += 1
                 # put all terms in a separate dictionary in order to delimitate the first word in the 25k words per
                 # block
-                terms_dict = add_to_positional_dict(term=word, doc_id=None, my_dict=terms_dict)
+                terms_dict = add_to_frequency_dict(term=word, doc_id=newid, my_dict=terms_dict)
                 # this word signals the end of an article
-                if word is "\x03":
+                if word is "</html>":
+                    print('end of file')
                     # doc_length += 1
                     newid += 1
                     doc_length_dict[newid - 1] = doc_length
@@ -440,9 +415,9 @@ def tokenize_all(reuters_files, output_dir):
 
                     if word is "\x03":
                         print('reached article ' + str(newid))
-                        final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict)
+                        final_dict = add_to_frequency_dict(term=word, doc_id=newid - 1, my_dict=final_dict)
                     else:
-                        final_dict = add_to_positional_dict(term=word, doc_id=newid, my_dict=final_dict)
+                        final_dict = add_to_frequency_dict(term=word, doc_id=newid, my_dict=final_dict)
 
                     if len(str(block_write)) is 1:
                         block_prefix = "BLOCK0"
@@ -461,10 +436,7 @@ def tokenize_all(reuters_files, output_dir):
 
                 # if not starting a new block, just add to dict
                 else:
-                    if word is "\x03":
-                        final_dict = add_to_positional_dict(term=word, doc_id=newid - 1, my_dict=final_dict, )
-                    else:
-                        final_dict = add_to_positional_dict(term=word, doc_id=newid, my_dict=final_dict)
+                    final_dict = add_to_frequency_dict(term=word, doc_id=newid, my_dict=final_dict)
     # remaining that has not been written to disk is written to the last block
     if len(final_dict) is not 0:
         print('last block to write with remaining terms')
@@ -473,7 +445,7 @@ def tokenize_all(reuters_files, output_dir):
             block_prefix = "BLOCK0"
         else:
             block_prefix = "BLOCK"
-        # printing the positional dictionary
+        # printing the frequency dictionary
         with open(output_dir + block_prefix + str(block_write) + ".txt", 'w+') as disk_write:
             [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in sorted(final_dict.items())]
             disk_write.write('EOF')
@@ -485,9 +457,13 @@ def tokenize_all(reuters_files, output_dir):
 
     # this gives back the 3 terms that start each of the blocks respectively
     print(len(terms_ordered))
-    print('first block value' + terms_ordered[0])
-    print('first block value' + terms_ordered[25000])
-    print('first block value' + terms_ordered[50000])
+    try:
+        print('first block value' + terms_ordered[0])
+        print('first block value' + terms_ordered[25000])
+        print('first block value' + terms_ordered[50000])
+    except:
+        print('array out of bounds')
+    print('test')
     disk_write = open("test.txt", "w+")
     for each in terms_ordered:
         disk_write.write(each)
@@ -499,3 +475,111 @@ def tokenize_all(reuters_files, output_dir):
     disk_write = open("DOC_LENGTH_DICT" + ".txt", "w+")
     disk_write.write(jsbeautifier.beautify(json.dumps(doc_length_dict, sort_keys=True)))
     disk_write.close()
+
+
+def tokenize_all_crawler(files, output_dir):
+    top150 = stopwords.words('english')[0:150]
+    block_dict = {}
+    url_suffix_dict = {}
+    # open each file, remove unneeded tags, tokenize
+    newid = 1
+    block_write = 0
+    total_terms = 0
+    ps = PorterStemmer()
+    terms_dict = {}
+    # todo create a dict containing key=docID, value=doc length
+    doc_length_dict = {}
+    doc_length_avg = 0
+    newid = 0
+    print('starting to write a dictionary every 500 files...')
+    for file in files:
+        with open(file) as fp:
+            newid += 1
+            # make sure to reset the doc_length to 0, before reading a new file
+            print("file is", file)
+            # keep track of the newid associated with the link to concordia.ca page
+            url_suffix_dict[newid] = file[9:]
+            doc_length = 0
+            soup = BeautifulSoup(fp, 'html.parser')
+            text = soup.get_text()
+            text = ''.join(each for each in text if not each.isdigit())
+            text = text.lower()
+            text = nltk.word_tokenize(text)
+            # if token is not in top 150
+            text = [each for each in text if each not in top150]
+
+            # use of porter stemmer for the table 5.1 but not for the final dictionary that was queried
+            text = [ps.stem(each) for each in text]
+            total_terms += len(text)
+
+            # increment id per file
+
+            # each word becomes a token in a dictionary. Every 500 terms, write those to disk
+            for word in text:
+                # increase doc length for every word read
+                doc_length += 1
+                # put all terms in a separate dictionary in order to delimitate the first word in the 25k words per
+                # block
+                block_dict = add_to_frequency_dict(term=word, doc_id=newid, my_dict=terms_dict)
+                # this word signals the end of an article
+            print('end of file')
+            # at the end of the file, assign the length of the file to a newid in the doc_length_dict
+            doc_length_dict[newid] = doc_length
+
+            # when reaching the end of a document, increment the document's length, which will be divided at
+            # the end to give the doc length average
+            doc_length_avg += doc_length
+
+            # when reaching the file 500, write all the content of the current dictionary (containing 500 files
+            # terms and frequency)
+            if newid % 500 is 1 and newid is not 1:
+                if len(str(block_write)) is 1:
+                    block_prefix = "BLOCK0"
+                else:
+                    block_prefix = "BLOCK"
+                print('about to print to disk')
+                print_dict_to_file(output_dir=output_dir, filename=block_prefix + str(block_write),
+                                   dict_name=block_dict, sorted_keys=True)
+                # increment block number
+                block_write += 1
+                # reset dictionary
+                block_dict = {}
+    # remaining that has not been written to disk is written to the last block
+    if len(block_dict) is not 0:
+        print('last block to write with remaining terms')
+        print(block_write)
+        if len(str(block_write)) is 1:
+            block_prefix = "BLOCK0"
+        else:
+            block_prefix = "BLOCK"
+        print('about to print to disk')
+        # printing the frequency dictionary
+        print_dict_to_file(output_dir=output_dir, filename=block_prefix + str(block_write), dict_name=block_dict,
+                           sorted_keys=True)
+    print('total number of terms ' + str(total_terms))
+    terms_ordered = []
+    for i in sorted(terms_dict.keys()):
+        terms_ordered.append(i)
+
+    # this gives back the 3 terms that start each of the blocks respectively
+    print(len(terms_ordered))
+    try:
+        print('first block value' + terms_ordered[0])
+        print('first block value' + terms_ordered[25000])
+        print('first block value' + terms_ordered[50000])
+    except:
+        print('array out of bounds')
+    print('test')
+    # disk_write = open("test.txt", "w+")
+    # for each in terms_ordered:
+    #     disk_write.write(each)
+    #     disk_write.write('\n')
+    # disk_write.close()
+
+    doc_length_avg = doc_length_avg / len(doc_length_dict)
+    print('doc length average ' + str(doc_length_avg))
+    print_dict_to_file(output_dir='', filename='DOC_LENGTH_DICT', dict_name=doc_length_dict, sorted_keys=True)
+
+    # printing the urls and associated id
+    print_dict_to_file(output_dir='', filename='CONCORDIA_URLs', dict_name=url_suffix_dict,
+                       sorted_keys=False)
