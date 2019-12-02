@@ -95,3 +95,32 @@ def print_dict_to_file(output_dir, filename, dict_name, sorted_keys):
             [disk_write.write('"{0}" :{1}\n'.format(key, value)) for key, value in
              dict_name.items()]
             disk_write.write('EOF')
+
+
+# retrieve the URL for given document id
+def get_urls_for_doc_id_list(doc_id_list, url_prefix):
+    doc_id_url_dict = {}
+    doc_id_list = sorted(doc_id_list)
+    try:
+        with open('CONCORDIA_URLs.txt') as fp:
+            line = fp.readline()
+            line_value = 1
+            while line or doc_id_list is not None:
+                if line == "EOF":
+                    return doc_id_url_dict
+                if line_value == doc_id_list[0]:
+                    doc_url = line[line.index('\" :') + 3:]
+                    doc_url = doc_url.replace("\n", "")
+                    doc_url = doc_url.replace(",", "")
+                    doc_url = doc_url.replace(" ", "")
+                    doc_url = doc_url.replace("\\", "/")
+                    doc_id_url_dict[doc_id_list[0]] = url_prefix + doc_url
+                    doc_id_list.pop(0)
+                    line = fp.readline()
+                line_value += 1
+    except Exception as e:
+        print('line where exception occured')
+        print(line)
+        print(e)
+        print('error in reading url or url file')
+    return doc_id_url_dict
